@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#667eea">
-    <meta name="description" content="Complete CRM solution with offline capability">
-    <link rel="manifest" href="manifest.json">
-    <title>2026 techVA AI CRM Pro</title>
+    <title>2026 techVA AI CRM - Tier 1</title>
     <style>
         * {
             margin: 0;
@@ -28,7 +25,6 @@
             max-width: 100%;
             margin: 0 auto;
             padding: 1%;
-            padding-bottom: 80px;
         }
 
         header {
@@ -42,7 +38,7 @@
         }
 
         h1 {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
@@ -53,37 +49,9 @@
         }
 
         .subtitle {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #a0a0a0;
             font-weight: 400;
-        }
-
-        .offline-indicator {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 6px 12px;
-            background: rgba(244, 67, 54, 0.9);
-            color: white;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            z-index: 3000;
-            display: none;
-            animation: pulse 2s infinite;
-        }
-
-        .offline-indicator.show {
-            display: block;
-        }
-
-        .online-indicator {
-            background: rgba(76, 175, 80, 0.9);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
 
         .stats-grid {
@@ -102,7 +70,7 @@
         }
 
         .stat-value {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #667eea;
             display: block;
@@ -110,7 +78,7 @@
         }
 
         .stat-label {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             color: #b0b0b0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -128,12 +96,12 @@
 
         .tab {
             flex: 1;
-            min-width: 70px;
-            padding: 8px;
+            min-width: 80px;
+            padding: 10px;
             background: transparent;
             border: none;
             color: #a0a0a0;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             border-radius: 8px;
@@ -176,7 +144,7 @@
             transform: scale(0.95);
         }
 
-        .contact-card, .deal-card, .task-card, .event-card, .product-card {
+        .contact-card, .deal-card, .task-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -187,7 +155,7 @@
             overflow: hidden;
         }
 
-        .contact-card::before, .deal-card::before, .task-card::before, .event-card::before, .product-card::before {
+        .contact-card::before, .deal-card::before, .task-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -205,19 +173,19 @@
         }
 
         .contact-name {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 4px;
         }
 
         .contact-company {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #a0a0a0;
         }
 
         .contact-info {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #b0b0b0;
             margin: 4px 0;
             display: flex;
@@ -236,7 +204,7 @@
             display: inline-block;
             padding: 3px 8px;
             border-radius: 8px;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             font-weight: 600;
             background: rgba(102, 126, 234, 0.2);
             color: #667eea;
@@ -247,67 +215,87 @@
             display: inline-block;
             padding: 4px 10px;
             border-radius: 12px;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .status-lead { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.4); }
-        .status-prospect { background: rgba(33, 150, 243, 0.2); color: #2196f3; border: 1px solid rgba(33, 150, 243, 0.4); }
-        .status-customer { background: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.4); }
-        .status-negotiation { background: rgba(255, 152, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.4); }
-        .status-closed { background: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.4); }
-        .status-lost { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid rgba(244, 67, 54, 0.4); }
-        .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.4); }
-        .status-completed { background: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.4); }
-
-        .lead-score {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
+        .status-lead {
             background: rgba(255, 193, 7, 0.2);
             color: #ffc107;
             border: 1px solid rgba(255, 193, 7, 0.4);
         }
 
-        .lead-score.hot { background: rgba(244, 67, 54, 0.2); color: #f44336; border-color: rgba(244, 67, 54, 0.4); }
-        .lead-score.warm { background: rgba(255, 152, 0, 0.2); color: #ff9800; border-color: rgba(255, 152, 0, 0.4); }
-        .lead-score.cold { background: rgba(33, 150, 243, 0.2); color: #2196f3; border-color: rgba(33, 150, 243, 0.4); }
+        .status-prospect {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+            border: 1px solid rgba(33, 150, 243, 0.4);
+        }
+
+        .status-customer {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.4);
+        }
+
+        .status-negotiation {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+            border: 1px solid rgba(255, 152, 0, 0.4);
+        }
+
+        .status-closed {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.4);
+        }
+
+        .status-lost {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.4);
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.4);
+        }
+
+        .status-completed {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.4);
+        }
 
         .deal-value {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #667eea;
             margin: 8px 0;
         }
 
         .deal-info {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #b0b0b0;
             margin: 4px 0;
         }
 
         .action-btns {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin-top: 10px;
-            flex-wrap: wrap;
         }
 
         .btn {
             flex: 1;
-            min-width: 60px;
-            padding: 7px;
+            padding: 8px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.05);
             color: #e0e0e0;
             border-radius: 8px;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -356,7 +344,7 @@
         }
 
         .modal-header {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 16px;
@@ -365,12 +353,12 @@
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .form-label {
             display: block;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #a0a0a0;
             margin-bottom: 6px;
             text-transform: uppercase;
@@ -380,18 +368,18 @@
 
         .form-input, .form-select, .form-textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             color: #e0e0e0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             font-family: inherit;
         }
 
         .form-textarea {
-            min-height: 70px;
+            min-height: 80px;
             resize: vertical;
         }
 
@@ -419,7 +407,7 @@
             border: none;
             color: white;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -436,7 +424,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: #e0e0e0;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
         }
@@ -454,7 +442,7 @@
         }
 
         .empty-text {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         .search-box {
@@ -464,7 +452,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             color: #e0e0e0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             margin-bottom: 1%;
         }
 
@@ -474,27 +462,44 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
-        .toolbar {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 1%;
-            flex-wrap: wrap;
+        .history-timeline {
+            margin-top: 10px;
+            padding-left: 10px;
+            border-left: 2px solid rgba(102, 126, 234, 0.3);
         }
 
-        .toolbar-btn {
-            padding: 7px 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .history-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 8px;
-            color: #e0e0e0;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 0.75rem;
         }
 
-        .toolbar-btn:active {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(0.98);
+        .history-time {
+            color: #888;
+            font-size: 0.65rem;
+        }
+
+        .notes-section {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .note-item {
+            padding: 8px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .note-time {
+            color: #888;
+            font-size: 0.65rem;
+            margin-top: 4px;
         }
 
         .pipeline-board {
@@ -505,14 +510,14 @@
         }
 
         .pipeline-column {
-            min-width: 260px;
+            min-width: 280px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 12px;
         }
 
         .pipeline-header {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: #fff;
             margin-bottom: 10px;
@@ -525,160 +530,100 @@
             background: rgba(102, 126, 234, 0.3);
             padding: 2px 8px;
             border-radius: 10px;
-            font-size: 0.65rem;
-        }
-
-        .chart-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 1%;
-        }
-
-        .chart-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 12px;
-        }
-
-        .chart-bar {
-            margin-bottom: 10px;
-        }
-
-        .chart-label {
             font-size: 0.7rem;
-            color: #a0a0a0;
-            margin-bottom: 4px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1%;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toolbar-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0.98);
+        }
+
+        .custom-fields {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .custom-field {
             display: flex;
             justify-content: space-between;
-        }
-
-        .chart-progress {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .chart-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            margin-top: 10px;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .calendar-day.header {
-            font-weight: 700;
-            color: #a0a0a0;
-            cursor: default;
-        }
-
-        .calendar-day.current {
-            background: rgba(102, 126, 234, 0.3);
-            color: #667eea;
-            font-weight: 700;
-        }
-
-        .calendar-day.has-event {
-            background: rgba(76, 175, 80, 0.2);
-            color: #4caf50;
-        }
-
-        .calendar-day:not(.header):hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .camera-preview {
-            width: 100%;
-            border-radius: 8px;
-            margin: 10px 0;
-            max-height: 300px;
-            object-fit: cover;
-        }
-
-        .location-info {
-            background: rgba(76, 175, 80, 0.1);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 8px;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 6px 0;
             font-size: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .install-prompt {
-            background: rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(102, 126, 234, 0.4);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 1%;
-            display: none;
+        .custom-field:last-child {
+            border-bottom: none;
         }
 
-        .install-prompt.show {
-            display: block;
-        }
-
-        .sync-status {
-            font-size: 0.7rem;
+        .custom-field-label {
             color: #a0a0a0;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        input[type="file"] {
-            display: none;
-        }
-
-        .file-upload-btn {
-            padding: 8px 12px;
-            background: rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(102, 126, 234, 0.4);
-            border-radius: 8px;
-            color: #667eea;
-            cursor: pointer;
-            font-size: 0.75rem;
+        .custom-field-value {
+            color: #e0e0e0;
             font-weight: 600;
-            transition: all 0.3s ease;
-            text-align: center;
-            display: inline-block;
         }
 
-        .file-upload-btn:active {
-            background: rgba(102, 126, 234, 0.3);
+        .templates-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .template-item {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .template-name {
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .template-subject {
+            font-size: 0.8rem;
+            color: #a0a0a0;
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: 0.9rem;
-            }
-            
-            .stat-value {
                 font-size: 1rem;
             }
             
+            .stat-value {
+                font-size: 1.1rem;
+            }
+            
             .stat-label {
-                font-size: 0.55rem;
+                font-size: 0.6rem;
             }
 
             .stats-grid {
@@ -686,36 +631,38 @@
             }
 
             .pipeline-column {
-                min-width: 220px;
+                min-width: 240px;
             }
+        }
 
-            .tab {
-                font-size: 0.65rem;
-                padding: 6px;
-            }
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-btn {
+            padding: 10px 16px;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 8px;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .file-upload-btn:active {
+            background: rgba(102, 126, 234, 0.3);
         }
     </style>
 </head>
 <body>
-    <div class="offline-indicator" id="offlineIndicator">
-        📡 Offline Mode
-    </div>
-
     <div class="container">
         <header>
-            <h1>2026 techVA AI automation CRM Pro</h1>
-            <div class="subtitle">Complete CRM Solution with PWA Features</div>
+            <h1>2026 techVA AI automation Simple CRM</h1>
+            <div class="subtitle">Manage contacts and sales - Tier 1 Enhanced</div>
         </header>
-
-        <div class="install-prompt" id="installPrompt">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <strong style="color: #667eea;">📲 Install App</strong>
-                    <p style="font-size: 0.7rem; margin-top: 4px; color: #a0a0a0;">Add to home screen for offline access</p>
-                </div>
-                <button class="btn-primary" style="flex: 0; padding: 8px 16px;" onclick="installApp()">Install</button>
-            </div>
-        </div>
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -727,8 +674,8 @@
                 <span class="stat-label">Deals</span>
             </div>
             <div class="stat-card">
-                <span class="stat-value" id="conversionRate">0%</span>
-                <span class="stat-label">Conv. Rate</span>
+                <span class="stat-value" id="totalTasks">0</span>
+                <span class="stat-label">Tasks</span>
             </div>
             <div class="stat-card">
                 <span class="stat-value" id="totalValue">$0</span>
@@ -736,14 +683,13 @@
             </div>
         </div>
 
-        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search...">
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search contacts, deals, or tasks...">
 
         <div class="toolbar">
-            <button class="toolbar-btn" onclick="exportData()">📤 Export</button>
-            <button class="toolbar-btn" onclick="requestNotificationPermission()">🔔 Notifications</button>
-            <button class="toolbar-btn" onclick="openCamera()">📷 Scan Card</button>
-            <button class="toolbar-btn" onclick="getLocation()">📍 Location</button>
-            <button class="toolbar-btn" onclick="syncData()">🔄 Sync</button>
+            <button class="toolbar-btn" onclick="exportData()">📤 Export CSV</button>
+            <label for="importFile" class="toolbar-btn">📥 Import CSV</label>
+            <input type="file" id="importFile" accept=".csv" onchange="importData(event)">
+            <button class="toolbar-btn" onclick="openTemplatesModal()">✉️ Email Templates</button>
         </div>
 
         <div class="tabs">
@@ -751,12 +697,6 @@
             <button class="tab" onclick="switchTab('deals')">Deals</button>
             <button class="tab" onclick="switchTab('pipeline')">Pipeline</button>
             <button class="tab" onclick="switchTab('tasks')">Tasks</button>
-            <button class="tab" onclick="switchTab('calendar')">Calendar</button>
-            <button class="tab" onclick="switchTab('analytics')">Analytics</button>
-        </div>
-
-        <div class="sync-status" id="syncStatus">
-            ✓ Data synced
         </div>
 
         <div id="contactsTab" class="tab-content active">
@@ -774,342 +714,199 @@
         <div id="tasksTab" class="tab-content">
             <div id="tasksList"></div>
         </div>
-
-        <div id="calendarTab" class="tab-content">
-            <div id="calendarView"></div>
-            <div id="eventsList" style="margin-top: 20px;"></div>
-        </div>
-
-        <div id="analyticsTab" class="tab-content">
-            <div id="analyticsContent"></div>
-        </div>
     </div>
 
     <button class="add-btn" onclick="openAddModal()">+</button>
 
-    <!-- Modals -->
-    <div id="cameraModal" class="modal">
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">📷 Scan Business Card</div>
-            <video id="cameraPreview" class="camera-preview" autoplay playsinline></video>
-            <canvas id="cameraCanvas" style="display: none;"></canvas>
-            <img id="capturedImage" class="camera-preview" style="display: none;">
+            <div class="modal-header">Add New Contact</div>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" class="form-input" id="contactName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" id="contactEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" id="contactPhone">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Company</label>
+                    <input type="text" class="form-input" id="contactCompany">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="contactStatus">
+                        <option value="lead">Lead</option>
+                        <option value="prospect">Prospect</option>
+                        <option value="customer">Customer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tags (comma separated)</label>
+                    <input type="text" class="form-input" id="contactTags" placeholder="e.g. VIP, Tech, Enterprise">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Industry (Custom Field)</label>
+                    <input type="text" class="form-input" id="contactIndustry">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Source (Custom Field)</label>
+                    <select class="form-select" id="contactSource">
+                        <option value="">Select source</option>
+                        <option value="Website">Website</option>
+                        <option value="Referral">Referral</option>
+                        <option value="Cold Call">Cold Call</option>
+                        <option value="Event">Event</option>
+                        <option value="Social Media">Social Media</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Deal Modal -->
+    <div id="dealModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Add New Deal</div>
+            <form id="dealForm">
+                <div class="form-group">
+                    <label class="form-label">Deal Name *</label>
+                    <input type="text" class="form-input" id="dealName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contact Name *</label>
+                    <input type="text" class="form-input" id="dealContact" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deal Value ($) *</label>
+                    <input type="number" class="form-input" id="dealValue" required min="0" step="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Stage</label>
+                    <select class="form-select" id="dealStage">
+                        <option value="lead">Lead</option>
+                        <option value="prospect">Prospect</option>
+                        <option value="negotiation">Negotiation</option>
+                        <option value="closed">Closed Won</option>
+                        <option value="lost">Closed Lost</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expected Close Date</label>
+                    <input type="date" class="form-input" id="dealCloseDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tags (comma separated)</label>
+                    <input type="text" class="form-input" id="dealTags" placeholder="e.g. Enterprise, Urgent, Q1">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Deal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Add New Task</div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label class="form-label">Task Title *</label>
+                    <input type="text" class="form-input" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="taskDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Related To</label>
+                    <input type="text" class="form-input" id="taskRelated" placeholder="Contact or Deal name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Due Date</label>
+                    <input type="date" class="form-input" id="taskDueDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select class="form-select" id="taskPriority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Add Note</div>
+            <form id="noteForm">
+                <input type="hidden" id="noteEntityType">
+                <input type="hidden" id="noteEntityId">
+                <div class="form-group">
+                    <label class="form-label">Note</label>
+                    <textarea class="form-textarea" id="noteText" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Email Templates Modal -->
+    <div id="templatesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Email Templates</div>
+            <div class="templates-list" id="templatesList"></div>
             <div class="form-actions">
-                <button class="btn-secondary" onclick="closeCamera()">Cancel</button>
-                <button class="btn-primary" id="captureBtn" onclick="capturePhoto()">📸 Capture</button>
-                <button class="btn-primary" id="processBtn" style="display: none;" onclick="processBusinessCard()">✓ Process</button>
+                <button type="button" class="btn-secondary" onclick="closeModal()">Close</button>
+                <button type="button" class="btn-primary" onclick="addNewTemplate()">+ New Template</button>
             </div>
         </div>
     </div>
 
-    <div id="locationModal" class="modal">
+    <!-- Contact Detail Modal -->
+    <div id="contactDetailModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">📍 Current Location</div>
-            <div id="locationDisplay"></div>
+            <div class="modal-header" id="contactDetailName">Contact Details</div>
+            <div id="contactDetailContent"></div>
             <div class="form-actions">
-                <button class="btn-primary" onclick="closeModal()">Close</button>
+                <button type="button" class="btn-secondary" onclick="closeModal()">Close</button>
+                <button type="button" class="btn-primary" onclick="addNoteToContact()">Add Note</button>
             </div>
         </div>
     </div>
 
     <script>
-        // IndexedDB setup for offline storage
-        let db;
-        const DB_NAME = 'techva_crm_db';
-        const DB_VERSION = 1;
-
-        function initDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, DB_VERSION);
-                
-                request.onerror = () => reject(request.error);
-                request.onsuccess = () => {
-                    db = request.result;
-                    resolve(db);
-                };
-                
-                request.onupgradeneeded = (event) => {
-                    const db = event.target.result;
-                    
-                    if (!db.objectStoreNames.contains('contacts')) {
-                        db.createObjectStore('contacts', { keyPath: 'id', autoIncrement: true });
-                    }
-                    if (!db.objectStoreNames.contains('deals')) {
-                        db.createObjectStore('deals', { keyPath: 'id', autoIncrement: true });
-                    }
-                    if (!db.objectStoreNames.contains('tasks')) {
-                        db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
-                    }
-                    if (!db.objectStoreNames.contains('events')) {
-                        db.createObjectStore('events', { keyPath: 'id', autoIncrement: true });
-                    }
-                };
-            });
-        }
-
-        // Save to IndexedDB
-        async function saveToIndexedDB(storeName, data) {
-            if (!db) await initDB();
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction([storeName], 'readwrite');
-                const store = transaction.objectStore(storeName);
-                const request = store.put(data);
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        // Load from IndexedDB
-        async function loadFromIndexedDB(storeName) {
-            if (!db) await initDB();
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction([storeName], 'readonly');
-                const store = transaction.objectStore(storeName);
-                const request = store.getAll();
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        // Service Worker registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker registered:', reg))
-                    .catch(err => console.log('Service Worker registration failed:', err));
-            });
-        }
-
-        // Install prompt
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installPrompt').classList.add('show');
-        });
-
-        async function installApp() {
-            if (!deferredPrompt) {
-                alert('App is already installed or installation not available');
-                return;
-            }
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                document.getElementById('installPrompt').classList.remove('show');
-            }
-            deferredPrompt = null;
-        }
-
-        // Online/Offline detection
-        window.addEventListener('online', () => {
-            const indicator = document.getElementById('offlineIndicator');
-            indicator.textContent = '✓ Online';
-            indicator.classList.add('online-indicator');
-            indicator.classList.add('show');
-            setTimeout(() => {
-                indicator.classList.remove('show');
-            }, 3000);
-            syncData();
-        });
-
-        window.addEventListener('offline', () => {
-            const indicator = document.getElementById('offlineIndicator');
-            indicator.textContent = '📡 Offline Mode';
-            indicator.classList.remove('online-indicator');
-            indicator.classList.add('show');
-        });
-
-        // Notification permission
-        async function requestNotificationPermission() {
-            if (!('Notification' in window)) {
-                alert('This browser does not support notifications');
-                return;
-            }
-
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                new Notification('Notifications Enabled!', {
-                    body: 'You will now receive CRM updates',
-                    icon: '/icon-192.png',
-                    badge: '/icon-192.png'
-                });
-            }
-        }
-
-        // Camera functionality
-        let stream;
-        async function openCamera() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' } 
-                });
-                const video = document.getElementById('cameraPreview');
-                video.srcObject = stream;
-                video.style.display = 'block';
-                document.getElementById('capturedImage').style.display = 'none';
-                document.getElementById('captureBtn').style.display = 'block';
-                document.getElementById('processBtn').style.display = 'none';
-                document.getElementById('cameraModal').classList.add('active');
-            } catch (err) {
-                alert('Camera access denied: ' + err.message);
-            }
-        }
-
-        function capturePhoto() {
-            const video = document.getElementById('cameraPreview');
-            const canvas = document.getElementById('cameraCanvas');
-            const img = document.getElementById('capturedImage');
-            
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            
-            img.src = canvas.toDataURL('image/png');
-            img.style.display = 'block';
-            video.style.display = 'none';
-            
-            document.getElementById('captureBtn').style.display = 'none';
-            document.getElementById('processBtn').style.display = 'block';
-        }
-
-        function processBusinessCard() {
-            // Simulated OCR processing
-            const name = prompt('Enter name from card:');
-            const email = prompt('Enter email from card:');
-            const phone = prompt('Enter phone from card:');
-            const company = prompt('Enter company from card:');
-            
-            if (name && email) {
-                contacts.push({
-                    id: contacts.length + 1,
-                    name,
-                    email,
-                    phone: phone || '',
-                    company: company || '',
-                    status: 'lead',
-                    tags: ['Scanned'],
-                    score: 50,
-                    interactions: 0,
-                    lastContact: new Date().toISOString().split('T')[0],
-                    history: [{ action: 'Contact created via card scan', date: new Date().toISOString() }]
-                });
-                
-                saveAllData();
-                renderContacts();
-                updateStats();
-                closeCamera();
-                alert('Contact added from business card!');
-            }
-        }
-
-        function closeCamera() {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-            document.getElementById('cameraModal').classList.remove('active');
-        }
-
-        // Geolocation
-        async function getLocation() {
-            if (!navigator.geolocation) {
-                alert('Geolocation not supported');
-                return;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude, accuracy } = position.coords;
-                    document.getElementById('locationDisplay').innerHTML = `
-                        <div class="location-info">
-                            <div style="font-weight: 700; margin-bottom: 8px;">📍 Current Location</div>
-                            <div style="margin: 4px 0;">Latitude: ${latitude.toFixed(6)}</div>
-                            <div style="margin: 4px 0;">Longitude: ${longitude.toFixed(6)}</div>
-                            <div style="margin: 4px 0;">Accuracy: ±${Math.round(accuracy)}m</div>
-                            <div style="margin-top: 10px;">
-                                <a href="https://www.google.com/maps?q=${latitude},${longitude}" 
-                                   target="_blank" 
-                                   style="color: #667eea; text-decoration: underline;">
-                                    View on Google Maps
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('locationModal').classList.add('active');
-                },
-                (error) => {
-                    alert('Location access denied: ' + error.message);
-                }
-            );
-        }
-
-        // Background sync
-        async function syncData() {
-            const syncStatus = document.getElementById('syncStatus');
-            syncStatus.innerHTML = '🔄 Syncing...';
-            syncStatus.style.color = '#ff9800';
-
-            try {
-                // Save all data to IndexedDB
-                await saveAllData();
-                
-                // Simulate server sync
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                syncStatus.innerHTML = '✓ Data synced';
-                syncStatus.style.color = '#4caf50';
-                
-                setTimeout(() => {
-                    syncStatus.style.color = '#a0a0a0';
-                }, 3000);
-            } catch (err) {
-                syncStatus.innerHTML = '⚠️ Sync failed';
-                syncStatus.style.color = '#f44336';
-            }
-        }
-
-        async function saveAllData() {
-            for (const contact of contacts) {
-                await saveToIndexedDB('contacts', contact);
-            }
-            for (const deal of deals) {
-                await saveToIndexedDB('deals', deal);
-            }
-            for (const task of tasks) {
-                await saveToIndexedDB('tasks', task);
-            }
-            for (const event of events) {
-                await saveToIndexedDB('events', event);
-            }
-        }
-
-        async function loadAllData() {
-            try {
-                contacts = await loadFromIndexedDB('contacts') || [];
-                deals = await loadFromIndexedDB('deals') || [];
-                tasks = await loadFromIndexedDB('tasks') || [];
-                events = await loadFromIndexedDB('events') || [];
-                
-                if (contacts.length === 0) {
-                    initSampleData();
-                } else {
-                    renderAll();
-                    updateStats();
-                }
-            } catch (err) {
-                console.error('Error loading data:', err);
-                initSampleData();
-            }
-        }
-
-        // Data storage
+        // In-memory data storage
         let contacts = [];
         let deals = [];
         let tasks = [];
-        let events = [];
+        let notes = [];
+        let emailTemplates = [];
         let currentTab = 'contacts';
 
-        // Sample data
+        // Initialize with sample data
         function initSampleData() {
             contacts = [
                 {
@@ -1120,23 +917,61 @@
                     company: 'TechCorp Inc.',
                     status: 'customer',
                     tags: ['VIP', 'Tech'],
-                    score: 85,
-                    interactions: 12,
-                    lastContact: '2026-02-03',
-                    history: [{ action: 'Contact created', date: '2026-01-15T10:30:00' }]
+                    industry: 'Technology',
+                    source: 'Referral',
+                    history: [
+                        { action: 'Contact created', date: '2026-01-15T10:30:00' },
+                        { action: 'Email sent: Welcome message', date: '2026-01-15T14:20:00' }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: 'Michael Chen',
+                    email: 'mchen@innovate.io',
+                    phone: '+1 (555) 987-6543',
+                    company: 'Innovate Solutions',
+                    status: 'prospect',
+                    tags: ['Enterprise'],
+                    industry: 'Software',
+                    source: 'Website',
+                    history: [
+                        { action: 'Contact created', date: '2026-02-01T09:00:00' }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: 'Emily Rodriguez',
+                    email: 'emily.r@startup.com',
+                    phone: '+1 (555) 456-7890',
+                    company: 'Startup Ventures',
+                    status: 'lead',
+                    tags: ['Startup'],
+                    industry: 'Finance',
+                    source: 'Event',
+                    history: [
+                        { action: 'Contact created', date: '2026-02-03T11:15:00' }
+                    ]
                 }
             ];
 
             deals = [
                 {
                     id: 1,
-                    name: 'Enterprise License',
+                    name: 'Enterprise License Deal',
                     contact: 'Sarah Johnson',
                     value: 45000,
                     stage: 'negotiation',
                     closeDate: '2026-03-15',
-                    tags: ['Enterprise'],
-                    probability: 70
+                    tags: ['Enterprise', 'Q1']
+                },
+                {
+                    id: 2,
+                    name: 'Cloud Migration Project',
+                    contact: 'Michael Chen',
+                    value: 32500,
+                    stage: 'prospect',
+                    closeDate: '2026-04-01',
+                    tags: ['Cloud']
                 }
             ];
 
@@ -1144,157 +979,276 @@
                 {
                     id: 1,
                     title: 'Follow up with Sarah',
+                    description: 'Discuss contract terms',
                     related: 'Sarah Johnson',
                     dueDate: '2026-02-10',
                     priority: 'high',
                     status: 'pending'
+                },
+                {
+                    id: 2,
+                    title: 'Send proposal to Michael',
+                    description: 'Cloud migration proposal',
+                    related: 'Michael Chen',
+                    dueDate: '2026-02-08',
+                    priority: 'medium',
+                    status: 'pending'
                 }
             ];
 
-            events = [
+            notes = [
                 {
                     id: 1,
-                    title: 'Meeting with Sarah',
-                    date: '2026-02-08',
-                    time: '14:00',
-                    attendees: 'Sarah Johnson',
-                    location: 'Zoom'
+                    entityType: 'contact',
+                    entityId: 1,
+                    text: 'Very interested in enterprise features. Mentioned budget approval next week.',
+                    date: '2026-02-04T10:00:00'
                 }
             ];
 
-            saveAllData();
-            renderAll();
-            updateStats();
-        }
+            emailTemplates = [
+                {
+                    id: 1,
+                    name: 'Welcome Email',
+                    subject: 'Welcome to 2026 techVA!',
+                    body: 'Hi {{name}},\n\nWelcome to 2026 techVA AI automation! We\'re excited to have you on board.\n\nBest regards,\nThe Team'
+                },
+                {
+                    id: 2,
+                    name: 'Follow-up Email',
+                    subject: 'Following up on our conversation',
+                    body: 'Hi {{name}},\n\nI wanted to follow up on our recent conversation about {{topic}}.\n\nLooking forward to hearing from you.\n\nBest,\n{{sender}}'
+                },
+                {
+                    id: 3,
+                    name: 'Proposal Email',
+                    subject: 'Proposal for {{company}}',
+                    body: 'Hi {{name}},\n\nPlease find attached our proposal for your review.\n\nWe look forward to working with you.\n\nBest regards'
+                }
+            ];
 
-        function renderAll() {
             renderContacts();
             renderDeals();
             renderTasks();
             renderPipeline();
-            renderCalendar();
-            renderAnalytics();
+            updateStats();
         }
 
+        // Switch tabs
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
-            const tabs = ['contacts', 'deals', 'pipeline', 'tasks', 'calendar', 'analytics'];
+            const tabs = ['contacts', 'deals', 'pipeline', 'tasks'];
             const index = tabs.indexOf(tab);
             document.querySelectorAll('.tab')[index].classList.add('active');
             document.getElementById(tab + 'Tab').classList.add('active');
 
-            if (tab === 'pipeline') renderPipeline();
-            if (tab === 'calendar') renderCalendar();
-            if (tab === 'analytics') renderAnalytics();
+            if (tab === 'pipeline') {
+                renderPipeline();
+            }
         }
 
-        function getScoreClass(score) {
-            if (score >= 80) return 'hot';
-            if (score >= 60) return 'warm';
-            return 'cold';
-        }
-
-        function getScoreLabel(score) {
-            if (score >= 80) return 'Hot';
-            if (score >= 60) return 'Warm';
-            return 'Cold';
-        }
-
+        // Render contacts
         function renderContacts(filter = '') {
             const contactsList = document.getElementById('contactsList');
             const filtered = contacts.filter(c => 
                 c.name.toLowerCase().includes(filter.toLowerCase()) ||
-                c.email.toLowerCase().includes(filter.toLowerCase())
+                c.email.toLowerCase().includes(filter.toLowerCase()) ||
+                c.company.toLowerCase().includes(filter.toLowerCase()) ||
+                (c.tags && c.tags.some(tag => tag.toLowerCase().includes(filter.toLowerCase())))
             );
 
             if (filtered.length === 0) {
-                contactsList.innerHTML = '<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-text">No contacts</div></div>';
+                contactsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">👤</div>
+                        <div class="empty-text">No contacts found. Add your first contact!</div>
+                    </div>
+                `;
                 return;
             }
 
-            contactsList.innerHTML = filtered.map(contact => `
-                <div class="contact-card">
-                    <div class="contact-header">
-                        <div>
-                            <div class="contact-name">${contact.name}</div>
-                            <div class="contact-company">${contact.company || 'No company'}</div>
-                        </div>
-                        <div style="display: flex; gap: 6px; flex-direction: column; align-items: flex-end;">
+            contactsList.innerHTML = filtered.map(contact => {
+                const contactNotes = notes.filter(n => n.entityType === 'contact' && n.entityId === contact.id);
+                const tagsHtml = contact.tags ? `
+                    <div class="tags-container">
+                        ${contact.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="contact-card">
+                        <div class="contact-header">
+                            <div>
+                                <div class="contact-name">${contact.name}</div>
+                                <div class="contact-company">${contact.company || 'No company'}</div>
+                            </div>
                             <span class="status-badge status-${contact.status}">${contact.status}</span>
-                            <span class="lead-score ${getScoreClass(contact.score)}">⭐ ${contact.score}</span>
+                        </div>
+                        <div class="contact-info">📧 ${contact.email}</div>
+                        <div class="contact-info">📱 ${contact.phone || 'No phone'}</div>
+                        ${tagsHtml}
+                        ${contact.industry ? `
+                            <div class="custom-fields">
+                                <div class="custom-field">
+                                    <span class="custom-field-label">Industry:</span>
+                                    <span class="custom-field-value">${contact.industry}</span>
+                                </div>
+                                ${contact.source ? `
+                                    <div class="custom-field">
+                                        <span class="custom-field-label">Source:</span>
+                                        <span class="custom-field-value">${contact.source}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                        ${contactNotes.length > 0 ? `
+                            <div class="notes-section">
+                                <strong style="font-size: 0.75rem; color: #a0a0a0;">Latest Note:</strong>
+                                ${contactNotes.slice(-1).map(note => `
+                                    <div class="note-item">
+                                        ${note.text}
+                                        <div class="note-time">${formatDate(note.date)}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="action-btns">
+                            <button class="btn" onclick="viewContactDetail(${contact.id})">👁️ View</button>
+                            <button class="btn" onclick="addNote('contact', ${contact.id})">📝 Note</button>
+                            <button class="btn btn-delete" onclick="deleteContact(${contact.id})">🗑️</button>
                         </div>
                     </div>
-                    <div class="contact-info">📧 ${contact.email}</div>
-                    <div class="contact-info">📱 ${contact.phone || 'N/A'}</div>
-                    ${contact.tags ? `<div class="tags-container">${contact.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
-                    <div class="action-btns">
-                        <button class="btn" onclick="scheduleReminder(${contact.id})">🔔 Remind</button>
-                        <button class="btn btn-delete" onclick="deleteContact(${contact.id})">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        function renderDeals() {
+        // Render deals
+        function renderDeals(filter = '') {
             const dealsList = document.getElementById('dealsList');
-            if (deals.length === 0) {
-                dealsList.innerHTML = '<div class="empty-state"><div class="empty-icon">💼</div><div class="empty-text">No deals</div></div>';
-                return;
-            }
+            const filtered = deals.filter(d => 
+                d.name.toLowerCase().includes(filter.toLowerCase()) ||
+                d.contact.toLowerCase().includes(filter.toLowerCase()) ||
+                (d.tags && d.tags.some(tag => tag.toLowerCase().includes(filter.toLowerCase())))
+            );
 
-            dealsList.innerHTML = deals.map(deal => `
-                <div class="deal-card">
-                    <div class="contact-header">
-                        <div>
-                            <div class="contact-name">${deal.name}</div>
-                            <div class="contact-company">${deal.contact}</div>
-                        </div>
-                        <span class="status-badge status-${deal.stage}">${deal.stage}</span>
+            if (filtered.length === 0) {
+                dealsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">💼</div>
+                        <div class="empty-text">No deals found. Create your first deal!</div>
                     </div>
-                    <div class="deal-value">$${deal.value.toLocaleString()}</div>
-                    <div class="deal-info">📊 ${deal.probability}% probability</div>
-                </div>
-            `).join('');
-        }
-
-        function renderTasks() {
-            const tasksList = document.getElementById('tasksList');
-            if (tasks.length === 0) {
-                tasksList.innerHTML = '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">No tasks</div></div>';
+                `;
                 return;
             }
 
-            tasksList.innerHTML = tasks.map(task => `
-                <div class="task-card">
-                    <div class="contact-name">${task.title}</div>
-                    <div class="contact-company">${task.related}</div>
-                    <div class="deal-info">📅 ${task.dueDate}</div>
-                </div>
-            `).join('');
+            dealsList.innerHTML = filtered.map(deal => {
+                const tagsHtml = deal.tags ? `
+                    <div class="tags-container">
+                        ${deal.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="deal-card">
+                        <div class="contact-header">
+                            <div>
+                                <div class="contact-name">${deal.name}</div>
+                                <div class="contact-company">Contact: ${deal.contact}</div>
+                            </div>
+                            <span class="status-badge status-${deal.stage}">${deal.stage}</span>
+                        </div>
+                        <div class="deal-value">$${deal.value.toLocaleString()}</div>
+                        <div class="deal-info">📅 Close: ${deal.closeDate || 'Not set'}</div>
+                        ${tagsHtml}
+                        <div class="action-btns">
+                            <button class="btn" onclick="addNote('deal', ${deal.id})">📝 Note</button>
+                            <button class="btn" onclick="moveDealStage(${deal.id})">➡️ Move</button>
+                            <button class="btn btn-delete" onclick="deleteDeal(${deal.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function renderPipeline() {
-            const board = document.getElementById('pipelineBoard');
-            const stages = ['lead', 'prospect', 'negotiation', 'closed'];
-            const labels = { lead: 'Lead', prospect: 'Prospect', negotiation: 'Negotiation', closed: 'Closed' };
+        // Render tasks
+        function renderTasks(filter = '') {
+            const tasksList = document.getElementById('tasksList');
+            const filtered = tasks.filter(t => 
+                t.title.toLowerCase().includes(filter.toLowerCase()) ||
+                (t.related && t.related.toLowerCase().includes(filter.toLowerCase()))
+            );
 
-            board.innerHTML = stages.map(stage => {
+            if (filtered.length === 0) {
+                tasksList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">✓</div>
+                        <div class="empty-text">No tasks found. Add your first task!</div>
+                    </div>
+                `;
+                return;
+            }
+
+            tasksList.innerHTML = filtered.map(task => {
+                const priorityColors = {
+                    low: '#4caf50',
+                    medium: '#ff9800',
+                    high: '#f44336'
+                };
+
+                return `
+                    <div class="task-card">
+                        <div class="contact-header">
+                            <div>
+                                <div class="contact-name">${task.title}</div>
+                                <div class="contact-company">Related: ${task.related || 'None'}</div>
+                            </div>
+                            <span class="status-badge status-${task.status}">${task.status}</span>
+                        </div>
+                        ${task.description ? `<div class="deal-info">${task.description}</div>` : ''}
+                        <div class="deal-info">📅 Due: ${task.dueDate || 'No date'}</div>
+                        <div class="deal-info" style="color: ${priorityColors[task.priority]}">⚡ Priority: ${task.priority.toUpperCase()}</div>
+                        <div class="action-btns">
+                            <button class="btn" onclick="toggleTaskStatus(${task.id})">${task.status === 'pending' ? '✓ Complete' : '↺ Reopen'}</button>
+                            <button class="btn btn-delete" onclick="deleteTask(${task.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render pipeline
+        function renderPipeline() {
+            const pipelineBoard = document.getElementById('pipelineBoard');
+            const stages = ['lead', 'prospect', 'negotiation', 'closed'];
+            const stageLabels = {
+                lead: 'Lead',
+                prospect: 'Prospect',
+                negotiation: 'Negotiation',
+                closed: 'Closed Won'
+            };
+
+            pipelineBoard.innerHTML = stages.map(stage => {
                 const stageDeals = deals.filter(d => d.stage === stage);
-                const value = stageDeals.reduce((sum, d) => sum + d.value, 0);
+                const stageValue = stageDeals.reduce((sum, d) => sum + d.value, 0);
+
                 return `
                     <div class="pipeline-column">
                         <div class="pipeline-header">
-                            <span>${labels[stage]}</span>
+                            <span>${stageLabels[stage]}</span>
                             <span class="pipeline-count">${stageDeals.length}</span>
                         </div>
-                        <div style="font-size: 0.7rem; color: #a0a0a0;">$${value.toLocaleString()}</div>
-                        ${stageDeals.map(d => `
-                            <div class="deal-card" style="margin-top: 10px;">
-                                <div class="contact-name">${d.name}</div>
-                                <div class="deal-value" style="font-size: 1rem;">$${d.value.toLocaleString()}</div>
+                        <div style="font-size: 0.75rem; color: #a0a0a0; margin-bottom: 10px;">
+                            Total: $${stageValue.toLocaleString()}
+                        </div>
+                        ${stageDeals.map(deal => `
+                            <div class="deal-card" style="margin-bottom: 10px;">
+                                <div class="contact-name">${deal.name}</div>
+                                <div class="contact-company">${deal.contact}</div>
+                                <div class="deal-value" style="font-size: 1rem;">$${deal.value.toLocaleString()}</div>
+                                <div class="deal-info">📅 ${deal.closeDate || 'No date'}</div>
                             </div>
                         `).join('')}
                     </div>
@@ -1302,112 +1256,409 @@
             }).join('');
         }
 
-        function renderCalendar() {
-            document.getElementById('calendarView').innerHTML = '<div class="chart-container"><div class="chart-title">Calendar</div><p style="color: #a0a0a0;">Calendar view placeholder</p></div>';
-            document.getElementById('eventsList').innerHTML = events.map(e => `
-                <div class="event-card">
-                    <div class="contact-name">${e.title}</div>
-                    <div class="deal-info">📅 ${e.date} at ${e.time}</div>
-                </div>
-            `).join('');
-        }
-
-        function renderAnalytics() {
-            const totalLeads = contacts.filter(c => c.status === 'lead').length;
-            const totalCustomers = contacts.filter(c => c.status === 'customer').length;
-            const conversionRate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(0) : 0;
-
-            document.getElementById('analyticsContent').innerHTML = `
-                <div class="chart-container">
-                    <div class="chart-title">Key Metrics</div>
-                    <div class="chart-bar">
-                        <div class="chart-label">
-                            <span>Conversion Rate</span>
-                            <span>${conversionRate}%</span>
-                        </div>
-                        <div class="chart-progress">
-                            <div class="chart-fill" style="width: ${conversionRate}%"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
+        // Update statistics
         function updateStats() {
             document.getElementById('totalContacts').textContent = contacts.length;
             document.getElementById('totalDeals').textContent = deals.length;
+            document.getElementById('totalTasks').textContent = tasks.filter(t => t.status === 'pending').length;
             
-            const totalLeads = contacts.filter(c => c.status === 'lead').length;
-            const totalCustomers = contacts.filter(c => c.status === 'customer').length;
-            const rate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(0) : 0;
-            document.getElementById('conversionRate').textContent = rate + '%';
-            
-            const total = deals.reduce((sum, d) => sum + d.value, 0);
-            document.getElementById('totalValue').textContent = '$' + total.toLocaleString();
+            const totalValue = deals.reduce((sum, deal) => 
+                deal.stage !== 'lost' ? sum + deal.value : sum, 0
+            );
+            document.getElementById('totalValue').textContent = '$' + totalValue.toLocaleString();
         }
 
-        function scheduleReminder(contactId) {
-            const contact = contacts.find(c => c.id === contactId);
-            if (!contact) return;
-            
-            if ('Notification' in window && Notification.permission === 'granted') {
-                // Schedule notification for 1 minute from now (demo)
-                setTimeout(() => {
-                    new Notification(`Reminder: Follow up with ${contact.name}`, {
-                        body: `Contact: ${contact.email}`,
-                        icon: '/icon-192.png',
-                        badge: '/icon-192.png',
-                        tag: 'reminder-' + contactId
-                    });
-                }, 60000);
-                alert('Reminder set for 1 minute from now!');
-            } else {
-                alert('Please enable notifications first');
+        // Modal functions
+        function openAddModal() {
+            if (currentTab === 'contacts') {
+                document.getElementById('contactModal').classList.add('active');
+            } else if (currentTab === 'deals' || currentTab === 'pipeline') {
+                document.getElementById('dealModal').classList.add('active');
+            } else if (currentTab === 'tasks') {
+                document.getElementById('taskModal').classList.add('active');
             }
         }
 
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            document.getElementById('contactForm').reset();
+            document.getElementById('dealForm').reset();
+            document.getElementById('taskForm').reset();
+            document.getElementById('noteForm').reset();
+        }
+
+        // Add contact
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newContact = {
+                id: contacts.length > 0 ? Math.max(...contacts.map(c => c.id)) + 1 : 1,
+                name: document.getElementById('contactName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                company: document.getElementById('contactCompany').value,
+                status: document.getElementById('contactStatus').value,
+                tags: document.getElementById('contactTags').value.split(',').map(t => t.trim()).filter(t => t),
+                industry: document.getElementById('contactIndustry').value,
+                source: document.getElementById('contactSource').value,
+                history: [
+                    { action: 'Contact created', date: new Date().toISOString() }
+                ]
+            };
+
+            contacts.push(newContact);
+            renderContacts();
+            updateStats();
+            closeModal();
+        });
+
+        // Add deal
+        document.getElementById('dealForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newDeal = {
+                id: deals.length > 0 ? Math.max(...deals.map(d => d.id)) + 1 : 1,
+                name: document.getElementById('dealName').value,
+                contact: document.getElementById('dealContact').value,
+                value: parseFloat(document.getElementById('dealValue').value),
+                stage: document.getElementById('dealStage').value,
+                closeDate: document.getElementById('dealCloseDate').value,
+                tags: document.getElementById('dealTags').value.split(',').map(t => t.trim()).filter(t => t)
+            };
+
+            deals.push(newDeal);
+            renderDeals();
+            renderPipeline();
+            updateStats();
+            closeModal();
+        });
+
+        // Add task
+        document.getElementById('taskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newTask = {
+                id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                related: document.getElementById('taskRelated').value,
+                dueDate: document.getElementById('taskDueDate').value,
+                priority: document.getElementById('taskPriority').value,
+                status: 'pending'
+            };
+
+            tasks.push(newTask);
+            renderTasks();
+            updateStats();
+            closeModal();
+        });
+
+        // Add note
+        function addNote(entityType, entityId) {
+            document.getElementById('noteEntityType').value = entityType;
+            document.getElementById('noteEntityId').value = entityId;
+            document.getElementById('noteModal').classList.add('active');
+        }
+
+        document.getElementById('noteForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newNote = {
+                id: notes.length > 0 ? Math.max(...notes.map(n => n.id)) + 1 : 1,
+                entityType: document.getElementById('noteEntityType').value,
+                entityId: parseInt(document.getElementById('noteEntityId').value),
+                text: document.getElementById('noteText').value,
+                date: new Date().toISOString()
+            };
+
+            notes.push(newNote);
+            
+            // Add to history
+            const entityType = newNote.entityType;
+            const entityId = newNote.entityId;
+            
+            if (entityType === 'contact') {
+                const contact = contacts.find(c => c.id === entityId);
+                if (contact) {
+                    contact.history.push({
+                        action: 'Note added: ' + newNote.text.substring(0, 50) + '...',
+                        date: newNote.date
+                    });
+                }
+            }
+
+            renderContacts();
+            renderDeals();
+            closeModal();
+        });
+
+        // View contact detail
+        function viewContactDetail(contactId) {
+            const contact = contacts.find(c => c.id === contactId);
+            if (!contact) return;
+
+            const contactNotes = notes.filter(n => n.entityType === 'contact' && n.entityId === contactId);
+            
+            document.getElementById('contactDetailName').textContent = contact.name;
+            document.getElementById('contactDetailContent').innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <div class="form-label">Email</div>
+                    <div style="color: #e0e0e0; margin-bottom: 10px;">${contact.email}</div>
+                    
+                    <div class="form-label">Phone</div>
+                    <div style="color: #e0e0e0; margin-bottom: 10px;">${contact.phone || 'N/A'}</div>
+                    
+                    <div class="form-label">Company</div>
+                    <div style="color: #e0e0e0; margin-bottom: 10px;">${contact.company || 'N/A'}</div>
+                    
+                    ${contact.tags && contact.tags.length > 0 ? `
+                        <div class="form-label">Tags</div>
+                        <div class="tags-container" style="margin-bottom: 10px;">
+                            ${contact.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+
+                ${contact.history && contact.history.length > 0 ? `
+                    <div class="form-label">Activity History</div>
+                    <div class="history-timeline">
+                        ${contact.history.slice().reverse().map(h => `
+                            <div class="history-item">
+                                <div>${h.action}</div>
+                                <div class="history-time">${formatDate(h.date)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+
+                ${contactNotes.length > 0 ? `
+                    <div class="form-label" style="margin-top: 20px;">Notes</div>
+                    <div class="notes-section">
+                        ${contactNotes.slice().reverse().map(note => `
+                            <div class="note-item">
+                                ${note.text}
+                                <div class="note-time">${formatDate(note.date)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+            `;
+
+            document.getElementById('contactDetailModal').classList.add('active');
+            window.currentContactId = contactId;
+        }
+
+        function addNoteToContact() {
+            if (window.currentContactId) {
+                addNote('contact', window.currentContactId);
+            }
+        }
+
+        // Toggle task status
+        function toggleTaskStatus(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.status = task.status === 'pending' ? 'completed' : 'pending';
+                renderTasks();
+                updateStats();
+            }
+        }
+
+        // Move deal stage
+        function moveDealStage(dealId) {
+            const deal = deals.find(d => d.id === dealId);
+            if (!deal) return;
+
+            const stages = ['lead', 'prospect', 'negotiation', 'closed', 'lost'];
+            const currentIndex = stages.indexOf(deal.stage);
+            const nextIndex = (currentIndex + 1) % stages.length;
+            deal.stage = stages[nextIndex];
+
+            renderDeals();
+            renderPipeline();
+            updateStats();
+        }
+
+        // Delete functions
         function deleteContact(id) {
-            if (confirm('Delete?')) {
+            if (confirm('Delete this contact and all related notes?')) {
                 contacts = contacts.filter(c => c.id !== id);
-                saveAllData();
+                notes = notes.filter(n => !(n.entityType === 'contact' && n.entityId === id));
                 renderContacts();
                 updateStats();
             }
         }
 
-        function openAddModal() {
-            alert('Add functionality for ' + currentTab);
+        function deleteDeal(id) {
+            if (confirm('Delete this deal?')) {
+                deals = deals.filter(d => d.id !== id);
+                renderDeals();
+                renderPipeline();
+                updateStats();
+            }
         }
 
-        function closeModal() {
-            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        function deleteTask(id) {
+            if (confirm('Delete this task?')) {
+                tasks = tasks.filter(t => t.id !== id);
+                renderTasks();
+                updateStats();
+            }
         }
 
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            const filter = e.target.value;
+            if (currentTab === 'contacts') {
+                renderContacts(filter);
+            } else if (currentTab === 'deals') {
+                renderDeals(filter);
+            } else if (currentTab === 'tasks') {
+                renderTasks(filter);
+            }
+        });
+
+        // Email templates
+        function openTemplatesModal() {
+            renderTemplates();
+            document.getElementById('templatesModal').classList.add('active');
+        }
+
+        function renderTemplates() {
+            const templatesList = document.getElementById('templatesList');
+            templatesList.innerHTML = emailTemplates.map(template => `
+                <div class="template-item" onclick="useTemplate(${template.id})">
+                    <div class="template-name">${template.name}</div>
+                    <div class="template-subject">Subject: ${template.subject}</div>
+                </div>
+            `).join('');
+        }
+
+        function useTemplate(templateId) {
+            const template = emailTemplates.find(t => t.id === templateId);
+            if (template) {
+                alert(`Template: ${template.name}\n\nSubject: ${template.subject}\n\nBody:\n${template.body}\n\n(Copy this template to your email client)`);
+            }
+        }
+
+        function addNewTemplate() {
+            const name = prompt('Template name:');
+            if (!name) return;
+            
+            const subject = prompt('Email subject:');
+            if (!subject) return;
+            
+            const body = prompt('Email body (use {{name}}, {{company}} for variables):');
+            if (!body) return;
+
+            const newTemplate = {
+                id: emailTemplates.length > 0 ? Math.max(...emailTemplates.map(t => t.id)) + 1 : 1,
+                name,
+                subject,
+                body
+            };
+
+            emailTemplates.push(newTemplate);
+            renderTemplates();
+        }
+
+        // Export data to CSV
         function exportData() {
-            const data = JSON.stringify({ contacts, deals, tasks, events }, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
+            const csvContent = [
+                ['Name', 'Email', 'Phone', 'Company', 'Status', 'Tags', 'Industry', 'Source'].join(','),
+                ...contacts.map(c => [
+                    c.name,
+                    c.email,
+                    c.phone || '',
+                    c.company || '',
+                    c.status,
+                    c.tags ? c.tags.join(';') : '',
+                    c.industry || '',
+                    c.source || ''
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'crm-data-' + new Date().toISOString().split('T')[0] + '.json';
+            a.download = 'contacts_' + new Date().toISOString().split('T')[0] + '.csv';
             a.click();
             URL.revokeObjectURL(url);
         }
 
-        document.getElementById('searchBox').addEventListener('input', (e) => {
-            if (currentTab === 'contacts') renderContacts(e.target.value);
-        });
+        // Import data from CSV
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                const headers = lines[0].split(',');
+
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    const values = lines[i].split(',');
+                    const newContact = {
+                        id: contacts.length > 0 ? Math.max(...contacts.map(c => c.id)) + 1 : 1,
+                        name: values[0] || '',
+                        email: values[1] || '',
+                        phone: values[2] || '',
+                        company: values[3] || '',
+                        status: values[4] || 'lead',
+                        tags: values[5] ? values[5].split(';') : [],
+                        industry: values[6] || '',
+                        source: values[7] || '',
+                        history: [
+                            { action: 'Contact imported', date: new Date().toISOString() }
+                        ]
+                    };
+
+                    contacts.push(newContact);
+                }
+
+                renderContacts();
+                updateStats();
+                alert(`Imported ${lines.length - 1} contacts successfully!`);
+            };
+            reader.readAsText(file);
+        }
+
+        // Format date helper
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            if (days === 0) {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                if (hours === 0) {
+                    const minutes = Math.floor(diff / (1000 * 60));
+                    return minutes <= 1 ? 'Just now' : `${minutes} minutes ago`;
+                }
+                return hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+            } else if (days === 1) {
+                return 'Yesterday';
+            } else if (days < 7) {
+                return `${days} days ago`;
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
+
+        // Close modal on outside click
         window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal')) closeModal();
+            if (e.target.classList.contains('modal')) {
+                closeModal();
+            }
         });
 
         // Initialize app
-        initDB().then(() => {
-            loadAllData();
-        }).catch(() => {
-            initSampleData();
-        });
+        initSampleData();
     </script>
 </body>
 </html>
