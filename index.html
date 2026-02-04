@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 techVA AI CRM - Tier 1+2</title>
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Complete CRM solution with offline capability">
+    <link rel="manifest" href="manifest.json">
+    <title>2026 techVA AI CRM Pro</title>
     <style>
         * {
             margin: 0;
@@ -53,6 +56,34 @@
             font-size: 0.7rem;
             color: #a0a0a0;
             font-weight: 400;
+        }
+
+        .offline-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            background: rgba(244, 67, 54, 0.9);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            z-index: 3000;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+
+        .offline-indicator.show {
+            display: block;
+        }
+
+        .online-indicator {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .stats-grid {
@@ -576,61 +607,43 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        .attachment-list {
-            margin-top: 8px;
-        }
-
-        .attachment-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 6px;
-            margin-bottom: 6px;
-            font-size: 0.7rem;
-        }
-
-        .workflow-card {
-            background: rgba(255, 255, 255, 0.05);
+        .camera-preview {
+            width: 100%;
             border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            max-height: 300px;
+            object-fit: cover;
         }
 
-        .workflow-trigger {
+        .location-info {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
             font-size: 0.75rem;
-            color: #667eea;
-            margin-bottom: 6px;
         }
 
-        .workflow-action {
+        .install-prompt {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 1%;
+            display: none;
+        }
+
+        .install-prompt.show {
+            display: block;
+        }
+
+        .sync-status {
             font-size: 0.7rem;
             color: #a0a0a0;
-            padding-left: 12px;
-            border-left: 2px solid rgba(102, 126, 234, 0.3);
-        }
-
-        .quote-section {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 10px;
-        }
-
-        .quote-item {
+            margin-top: 8px;
             display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.75rem;
-        }
-
-        .quote-item:last-child {
-            border-bottom: none;
-            font-weight: 700;
-            color: #667eea;
+            align-items: center;
+            gap: 6px;
         }
 
         input[type="file"] {
@@ -684,11 +697,25 @@
     </style>
 </head>
 <body>
+    <div class="offline-indicator" id="offlineIndicator">
+        📡 Offline Mode
+    </div>
+
     <div class="container">
         <header>
             <h1>2026 techVA AI automation CRM Pro</h1>
-            <div class="subtitle">Complete CRM Solution - Tier 1 + Tier 2</div>
+            <div class="subtitle">Complete CRM Solution with PWA Features</div>
         </header>
+
+        <div class="install-prompt" id="installPrompt">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="color: #667eea;">📲 Install App</strong>
+                    <p style="font-size: 0.7rem; margin-top: 4px; color: #a0a0a0;">Add to home screen for offline access</p>
+                </div>
+                <button class="btn-primary" style="flex: 0; padding: 8px 16px;" onclick="installApp()">Install</button>
+            </div>
+        </div>
 
         <div class="stats-grid">
             <div class="stat-card">
@@ -713,11 +740,10 @@
 
         <div class="toolbar">
             <button class="toolbar-btn" onclick="exportData()">📤 Export</button>
-            <label for="importFile" class="toolbar-btn">📥 Import</label>
-            <input type="file" id="importFile" accept=".csv" onchange="importData(event)">
-            <button class="toolbar-btn" onclick="openTemplatesModal()">✉️ Templates</button>
-            <button class="toolbar-btn" onclick="openWorkflowsModal()">⚙️ Workflows</button>
-            <button class="toolbar-btn" onclick="openProductsModal()">📦 Products</button>
+            <button class="toolbar-btn" onclick="requestNotificationPermission()">🔔 Notifications</button>
+            <button class="toolbar-btn" onclick="openCamera()">📷 Scan Card</button>
+            <button class="toolbar-btn" onclick="getLocation()">📍 Location</button>
+            <button class="toolbar-btn" onclick="syncData()">🔄 Sync</button>
         </div>
 
         <div class="tabs">
@@ -727,6 +753,10 @@
             <button class="tab" onclick="switchTab('tasks')">Tasks</button>
             <button class="tab" onclick="switchTab('calendar')">Calendar</button>
             <button class="tab" onclick="switchTab('analytics')">Analytics</button>
+        </div>
+
+        <div class="sync-status" id="syncStatus">
+            ✓ Data synced
         </div>
 
         <div id="contactsTab" class="tab-content active">
@@ -757,34 +787,329 @@
 
     <button class="add-btn" onclick="openAddModal()">+</button>
 
-    <!-- Modals placeholder -->
-    <div id="contactModal" class="modal"></div>
-    <div id="dealModal" class="modal"></div>
-    <div id="taskModal" class="modal"></div>
-    <div id="eventModal" class="modal"></div>
-    <div id="noteModal" class="modal"></div>
-    <div id="templatesModal" class="modal"></div>
-    <div id="contactDetailModal" class="modal"></div>
-    <div id="workflowsModal" class="modal"></div>
-    <div id="productsModal" class="modal"></div>
-    <div id="quoteModal" class="modal"></div>
+    <!-- Modals -->
+    <div id="cameraModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📷 Scan Business Card</div>
+            <video id="cameraPreview" class="camera-preview" autoplay playsinline></video>
+            <canvas id="cameraCanvas" style="display: none;"></canvas>
+            <img id="capturedImage" class="camera-preview" style="display: none;">
+            <div class="form-actions">
+                <button class="btn-secondary" onclick="closeCamera()">Cancel</button>
+                <button class="btn-primary" id="captureBtn" onclick="capturePhoto()">📸 Capture</button>
+                <button class="btn-primary" id="processBtn" style="display: none;" onclick="processBusinessCard()">✓ Process</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📍 Current Location</div>
+            <div id="locationDisplay"></div>
+            <div class="form-actions">
+                <button class="btn-primary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script>
+        // IndexedDB setup for offline storage
+        let db;
+        const DB_NAME = 'techva_crm_db';
+        const DB_VERSION = 1;
+
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    
+                    if (!db.objectStoreNames.contains('contacts')) {
+                        db.createObjectStore('contacts', { keyPath: 'id', autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains('deals')) {
+                        db.createObjectStore('deals', { keyPath: 'id', autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains('tasks')) {
+                        db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains('events')) {
+                        db.createObjectStore('events', { keyPath: 'id', autoIncrement: true });
+                    }
+                };
+            });
+        }
+
+        // Save to IndexedDB
+        async function saveToIndexedDB(storeName, data) {
+            if (!db) await initDB();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.put(data);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Load from IndexedDB
+        async function loadFromIndexedDB(storeName) {
+            if (!db) await initDB();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered:', reg))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+
+        // Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.add('show');
+        });
+
+        async function installApp() {
+            if (!deferredPrompt) {
+                alert('App is already installed or installation not available');
+                return;
+            }
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                document.getElementById('installPrompt').classList.remove('show');
+            }
+            deferredPrompt = null;
+        }
+
+        // Online/Offline detection
+        window.addEventListener('online', () => {
+            const indicator = document.getElementById('offlineIndicator');
+            indicator.textContent = '✓ Online';
+            indicator.classList.add('online-indicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+            syncData();
+        });
+
+        window.addEventListener('offline', () => {
+            const indicator = document.getElementById('offlineIndicator');
+            indicator.textContent = '📡 Offline Mode';
+            indicator.classList.remove('online-indicator');
+            indicator.classList.add('show');
+        });
+
+        // Notification permission
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                alert('This browser does not support notifications');
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                new Notification('Notifications Enabled!', {
+                    body: 'You will now receive CRM updates',
+                    icon: '/icon-192.png',
+                    badge: '/icon-192.png'
+                });
+            }
+        }
+
+        // Camera functionality
+        let stream;
+        async function openCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                const video = document.getElementById('cameraPreview');
+                video.srcObject = stream;
+                video.style.display = 'block';
+                document.getElementById('capturedImage').style.display = 'none';
+                document.getElementById('captureBtn').style.display = 'block';
+                document.getElementById('processBtn').style.display = 'none';
+                document.getElementById('cameraModal').classList.add('active');
+            } catch (err) {
+                alert('Camera access denied: ' + err.message);
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraPreview');
+            const canvas = document.getElementById('cameraCanvas');
+            const img = document.getElementById('capturedImage');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            img.src = canvas.toDataURL('image/png');
+            img.style.display = 'block';
+            video.style.display = 'none';
+            
+            document.getElementById('captureBtn').style.display = 'none';
+            document.getElementById('processBtn').style.display = 'block';
+        }
+
+        function processBusinessCard() {
+            // Simulated OCR processing
+            const name = prompt('Enter name from card:');
+            const email = prompt('Enter email from card:');
+            const phone = prompt('Enter phone from card:');
+            const company = prompt('Enter company from card:');
+            
+            if (name && email) {
+                contacts.push({
+                    id: contacts.length + 1,
+                    name,
+                    email,
+                    phone: phone || '',
+                    company: company || '',
+                    status: 'lead',
+                    tags: ['Scanned'],
+                    score: 50,
+                    interactions: 0,
+                    lastContact: new Date().toISOString().split('T')[0],
+                    history: [{ action: 'Contact created via card scan', date: new Date().toISOString() }]
+                });
+                
+                saveAllData();
+                renderContacts();
+                updateStats();
+                closeCamera();
+                alert('Contact added from business card!');
+            }
+        }
+
+        function closeCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById('cameraModal').classList.remove('active');
+        }
+
+        // Geolocation
+        async function getLocation() {
+            if (!navigator.geolocation) {
+                alert('Geolocation not supported');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude, accuracy } = position.coords;
+                    document.getElementById('locationDisplay').innerHTML = `
+                        <div class="location-info">
+                            <div style="font-weight: 700; margin-bottom: 8px;">📍 Current Location</div>
+                            <div style="margin: 4px 0;">Latitude: ${latitude.toFixed(6)}</div>
+                            <div style="margin: 4px 0;">Longitude: ${longitude.toFixed(6)}</div>
+                            <div style="margin: 4px 0;">Accuracy: ±${Math.round(accuracy)}m</div>
+                            <div style="margin-top: 10px;">
+                                <a href="https://www.google.com/maps?q=${latitude},${longitude}" 
+                                   target="_blank" 
+                                   style="color: #667eea; text-decoration: underline;">
+                                    View on Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('locationModal').classList.add('active');
+                },
+                (error) => {
+                    alert('Location access denied: ' + error.message);
+                }
+            );
+        }
+
+        // Background sync
+        async function syncData() {
+            const syncStatus = document.getElementById('syncStatus');
+            syncStatus.innerHTML = '🔄 Syncing...';
+            syncStatus.style.color = '#ff9800';
+
+            try {
+                // Save all data to IndexedDB
+                await saveAllData();
+                
+                // Simulate server sync
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                syncStatus.innerHTML = '✓ Data synced';
+                syncStatus.style.color = '#4caf50';
+                
+                setTimeout(() => {
+                    syncStatus.style.color = '#a0a0a0';
+                }, 3000);
+            } catch (err) {
+                syncStatus.innerHTML = '⚠️ Sync failed';
+                syncStatus.style.color = '#f44336';
+            }
+        }
+
+        async function saveAllData() {
+            for (const contact of contacts) {
+                await saveToIndexedDB('contacts', contact);
+            }
+            for (const deal of deals) {
+                await saveToIndexedDB('deals', deal);
+            }
+            for (const task of tasks) {
+                await saveToIndexedDB('tasks', task);
+            }
+            for (const event of events) {
+                await saveToIndexedDB('events', event);
+            }
+        }
+
+        async function loadAllData() {
+            try {
+                contacts = await loadFromIndexedDB('contacts') || [];
+                deals = await loadFromIndexedDB('deals') || [];
+                tasks = await loadFromIndexedDB('tasks') || [];
+                events = await loadFromIndexedDB('events') || [];
+                
+                if (contacts.length === 0) {
+                    initSampleData();
+                } else {
+                    renderAll();
+                    updateStats();
+                }
+            } catch (err) {
+                console.error('Error loading data:', err);
+                initSampleData();
+            }
+        }
+
         // Data storage
         let contacts = [];
         let deals = [];
         let tasks = [];
         let events = [];
-        let notes = [];
-        let emailTemplates = [];
-        let emailLogs = [];
-        let attachments = [];
-        let workflows = [];
-        let products = [];
-        let quotes = [];
         let currentTab = 'contacts';
 
-        // Initialize sample data
+        // Sample data
         function initSampleData() {
             contacts = [
                 {
@@ -795,73 +1120,23 @@
                     company: 'TechCorp Inc.',
                     status: 'customer',
                     tags: ['VIP', 'Tech'],
-                    industry: 'Technology',
-                    source: 'Referral',
                     score: 85,
                     interactions: 12,
                     lastContact: '2026-02-03',
-                    history: [
-                        { action: 'Contact created', date: '2026-01-15T10:30:00' },
-                        { action: 'Email sent: Welcome', date: '2026-01-15T14:20:00' },
-                        { action: 'Meeting scheduled', date: '2026-02-01T09:00:00' }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: 'Michael Chen',
-                    email: 'mchen@innovate.io',
-                    phone: '+1 (555) 987-6543',
-                    company: 'Innovate Solutions',
-                    status: 'prospect',
-                    tags: ['Enterprise'],
-                    industry: 'Software',
-                    source: 'Website',
-                    score: 65,
-                    interactions: 5,
-                    lastContact: '2026-02-02',
-                    history: [
-                        { action: 'Contact created', date: '2026-02-01T09:00:00' }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: 'Emily Rodriguez',
-                    email: 'emily.r@startup.com',
-                    phone: '+1 (555) 456-7890',
-                    company: 'Startup Ventures',
-                    status: 'lead',
-                    tags: ['Startup'],
-                    industry: 'Finance',
-                    source: 'Event',
-                    score: 45,
-                    interactions: 2,
-                    lastContact: '2026-02-04',
-                    history: [
-                        { action: 'Contact created', date: '2026-02-03T11:15:00' }
-                    ]
+                    history: [{ action: 'Contact created', date: '2026-01-15T10:30:00' }]
                 }
             ];
 
             deals = [
                 {
                     id: 1,
-                    name: 'Enterprise License Deal',
+                    name: 'Enterprise License',
                     contact: 'Sarah Johnson',
                     value: 45000,
                     stage: 'negotiation',
                     closeDate: '2026-03-15',
-                    tags: ['Enterprise', 'Q1'],
+                    tags: ['Enterprise'],
                     probability: 70
-                },
-                {
-                    id: 2,
-                    name: 'Cloud Migration Project',
-                    contact: 'Michael Chen',
-                    value: 32500,
-                    stage: 'prospect',
-                    closeDate: '2026-04-01',
-                    tags: ['Cloud'],
-                    probability: 40
                 }
             ];
 
@@ -869,7 +1144,6 @@
                 {
                     id: 1,
                     title: 'Follow up with Sarah',
-                    description: 'Discuss contract terms',
                     related: 'Sarah Johnson',
                     dueDate: '2026-02-10',
                     priority: 'high',
@@ -884,75 +1158,11 @@
                     date: '2026-02-08',
                     time: '14:00',
                     attendees: 'Sarah Johnson',
-                    type: 'meeting',
                     location: 'Zoom'
                 }
             ];
 
-            emailTemplates = [
-                {
-                    id: 1,
-                    name: 'Welcome Email',
-                    subject: 'Welcome to 2026 techVA!',
-                    body: 'Hi {{name}},\n\nWelcome aboard!\n\nBest,\nTeam'
-                },
-                {
-                    id: 2,
-                    name: 'Follow-up',
-                    subject: 'Following up',
-                    body: 'Hi {{name}},\n\nJust following up.\n\nBest'
-                }
-            ];
-
-            workflows = [
-                {
-                    id: 1,
-                    name: 'New Lead Workflow',
-                    trigger: 'New contact with status "lead"',
-                    actions: [
-                        'Send welcome email',
-                        'Create follow-up task (3 days)',
-                        'Assign to sales team'
-                    ],
-                    active: true
-                },
-                {
-                    id: 2,
-                    name: 'Deal Won Workflow',
-                    trigger: 'Deal stage changed to "closed"',
-                    actions: [
-                        'Send thank you email',
-                        'Update contact status to "customer"',
-                        'Create onboarding task'
-                    ],
-                    active: true
-                }
-            ];
-
-            products = [
-                {
-                    id: 1,
-                    name: 'Basic Plan',
-                    description: 'Essential features for small teams',
-                    price: 49,
-                    unit: 'user/month'
-                },
-                {
-                    id: 2,
-                    name: 'Pro Plan',
-                    description: 'Advanced features for growing businesses',
-                    price: 99,
-                    unit: 'user/month'
-                },
-                {
-                    id: 3,
-                    name: 'Enterprise Plan',
-                    description: 'Full suite with custom solutions',
-                    price: 299,
-                    unit: 'user/month'
-                }
-            ];
-
+            saveAllData();
             renderAll();
             updateStats();
         }
@@ -997,13 +1207,11 @@
             const contactsList = document.getElementById('contactsList');
             const filtered = contacts.filter(c => 
                 c.name.toLowerCase().includes(filter.toLowerCase()) ||
-                c.email.toLowerCase().includes(filter.toLowerCase()) ||
-                c.company.toLowerCase().includes(filter.toLowerCase()) ||
-                (c.tags && c.tags.some(tag => tag.toLowerCase().includes(filter.toLowerCase())))
+                c.email.toLowerCase().includes(filter.toLowerCase())
             );
 
             if (filtered.length === 0) {
-                contactsList.innerHTML = '<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-text">No contacts found</div></div>';
+                contactsList.innerHTML = '<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-text">No contacts</div></div>';
                 return;
             }
 
@@ -1016,37 +1224,28 @@
                         </div>
                         <div style="display: flex; gap: 6px; flex-direction: column; align-items: flex-end;">
                             <span class="status-badge status-${contact.status}">${contact.status}</span>
-                            <span class="lead-score ${getScoreClass(contact.score)}">⭐ ${contact.score} ${getScoreLabel(contact.score)}</span>
+                            <span class="lead-score ${getScoreClass(contact.score)}">⭐ ${contact.score}</span>
                         </div>
                     </div>
                     <div class="contact-info">📧 ${contact.email}</div>
-                    <div class="contact-info">📱 ${contact.phone || 'No phone'}</div>
-                    <div class="contact-info">🔄 ${contact.interactions} interactions • Last: ${contact.lastContact}</div>
+                    <div class="contact-info">📱 ${contact.phone || 'N/A'}</div>
                     ${contact.tags ? `<div class="tags-container">${contact.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
                     <div class="action-btns">
-                        <button class="btn" onclick="viewContactDetail(${contact.id})">👁️ View</button>
-                        <button class="btn" onclick="logEmail(${contact.id})">📧 Email</button>
-                        <button class="btn" onclick="scheduleEvent(${contact.id})">📅 Meet</button>
-                        <button class="btn" onclick="createQuote(${contact.id})">💰 Quote</button>
+                        <button class="btn" onclick="scheduleReminder(${contact.id})">🔔 Remind</button>
                         <button class="btn btn-delete" onclick="deleteContact(${contact.id})">🗑️</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function renderDeals(filter = '') {
+        function renderDeals() {
             const dealsList = document.getElementById('dealsList');
-            const filtered = deals.filter(d => 
-                d.name.toLowerCase().includes(filter.toLowerCase()) ||
-                d.contact.toLowerCase().includes(filter.toLowerCase())
-            );
-
-            if (filtered.length === 0) {
-                dealsList.innerHTML = '<div class="empty-state"><div class="empty-icon">💼</div><div class="empty-text">No deals found</div></div>';
+            if (deals.length === 0) {
+                dealsList.innerHTML = '<div class="empty-state"><div class="empty-icon">💼</div><div class="empty-text">No deals</div></div>';
                 return;
             }
 
-            dealsList.innerHTML = filtered.map(deal => `
+            dealsList.innerHTML = deals.map(deal => `
                 <div class="deal-card">
                     <div class="contact-header">
                         <div>
@@ -1056,68 +1255,46 @@
                         <span class="status-badge status-${deal.stage}">${deal.stage}</span>
                     </div>
                     <div class="deal-value">$${deal.value.toLocaleString()}</div>
-                    <div class="deal-info">📅 Close: ${deal.closeDate || 'Not set'}</div>
-                    <div class="deal-info">📊 Win Probability: ${deal.probability}%</div>
-                    ${deal.tags ? `<div class="tags-container">${deal.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
-                    <div class="action-btns">
-                        <button class="btn" onclick="createQuoteForDeal(${deal.id})">💰 Quote</button>
-                        <button class="btn" onclick="moveDealStage(${deal.id})">➡️ Move</button>
-                        <button class="btn btn-delete" onclick="deleteDeal(${deal.id})">🗑️</button>
-                    </div>
+                    <div class="deal-info">📊 ${deal.probability}% probability</div>
                 </div>
             `).join('');
         }
 
-        function renderTasks(filter = '') {
+        function renderTasks() {
             const tasksList = document.getElementById('tasksList');
-            const filtered = tasks.filter(t => 
-                t.title.toLowerCase().includes(filter.toLowerCase())
-            );
-
-            if (filtered.length === 0) {
+            if (tasks.length === 0) {
                 tasksList.innerHTML = '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">No tasks</div></div>';
                 return;
             }
 
-            tasksList.innerHTML = filtered.map(task => `
+            tasksList.innerHTML = tasks.map(task => `
                 <div class="task-card">
-                    <div class="contact-header">
-                        <div>
-                            <div class="contact-name">${task.title}</div>
-                            <div class="contact-company">${task.related || 'No relation'}</div>
-                        </div>
-                        <span class="status-badge status-${task.status}">${task.status}</span>
-                    </div>
+                    <div class="contact-name">${task.title}</div>
+                    <div class="contact-company">${task.related}</div>
                     <div class="deal-info">📅 ${task.dueDate}</div>
-                    <div class="action-btns">
-                        <button class="btn" onclick="toggleTaskStatus(${task.id})">${task.status === 'pending' ? '✓ Complete' : '↺ Reopen'}</button>
-                        <button class="btn btn-delete" onclick="deleteTask(${task.id})">🗑️</button>
-                    </div>
                 </div>
             `).join('');
         }
 
         function renderPipeline() {
-            const pipelineBoard = document.getElementById('pipelineBoard');
+            const board = document.getElementById('pipelineBoard');
             const stages = ['lead', 'prospect', 'negotiation', 'closed'];
-            const stageLabels = { lead: 'Lead', prospect: 'Prospect', negotiation: 'Negotiation', closed: 'Closed Won' };
+            const labels = { lead: 'Lead', prospect: 'Prospect', negotiation: 'Negotiation', closed: 'Closed' };
 
-            pipelineBoard.innerHTML = stages.map(stage => {
+            board.innerHTML = stages.map(stage => {
                 const stageDeals = deals.filter(d => d.stage === stage);
-                const stageValue = stageDeals.reduce((sum, d) => sum + d.value, 0);
+                const value = stageDeals.reduce((sum, d) => sum + d.value, 0);
                 return `
                     <div class="pipeline-column">
                         <div class="pipeline-header">
-                            <span>${stageLabels[stage]}</span>
+                            <span>${labels[stage]}</span>
                             <span class="pipeline-count">${stageDeals.length}</span>
                         </div>
-                        <div style="font-size: 0.7rem; color: #a0a0a0; margin-bottom: 10px;">$${stageValue.toLocaleString()}</div>
-                        ${stageDeals.map(deal => `
-                            <div class="deal-card" style="margin-bottom: 10px;">
-                                <div class="contact-name">${deal.name}</div>
-                                <div class="contact-company">${deal.contact}</div>
-                                <div class="deal-value" style="font-size: 1rem;">$${deal.value.toLocaleString()}</div>
-                                <div class="deal-info">${deal.probability}% prob</div>
+                        <div style="font-size: 0.7rem; color: #a0a0a0;">$${value.toLocaleString()}</div>
+                        ${stageDeals.map(d => `
+                            <div class="deal-card" style="margin-top: 10px;">
+                                <div class="contact-name">${d.name}</div>
+                                <div class="deal-value" style="font-size: 1rem;">$${d.value.toLocaleString()}</div>
                             </div>
                         `).join('')}
                     </div>
@@ -1126,74 +1303,21 @@
         }
 
         function renderCalendar() {
-            const calendarView = document.getElementById('calendarView');
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = now.getDate();
-
-            const eventDates = events.map(e => new Date(e.date).getDate());
-
-            let calendarHTML = '<div class="chart-container">';
-            calendarHTML += `<div class="chart-title">${now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>`;
-            calendarHTML += '<div class="calendar-grid">';
-            
-            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
-                calendarHTML += `<div class="calendar-day header">${day}</div>`;
-            });
-
-            for (let i = 0; i < firstDay; i++) {
-                calendarHTML += '<div class="calendar-day"></div>';
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const classes = ['calendar-day'];
-                if (day === today) classes.push('current');
-                if (eventDates.includes(day)) classes.push('has-event');
-                calendarHTML += `<div class="${classes.join(' ')}">${day}</div>`;
-            }
-
-            calendarHTML += '</div></div>';
-            calendarView.innerHTML = calendarHTML;
-
-            // Render events list
-            const eventsList = document.getElementById('eventsList');
-            if (events.length === 0) {
-                eventsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">No events scheduled</div></div>';
-            } else {
-                eventsList.innerHTML = events.map(event => `
-                    <div class="event-card">
-                        <div class="contact-name">${event.title}</div>
-                        <div class="deal-info">📅 ${event.date} at ${event.time}</div>
-                        <div class="deal-info">👥 ${event.attendees}</div>
-                        <div class="deal-info">📍 ${event.location}</div>
-                        <div class="action-btns">
-                            <button class="btn btn-delete" onclick="deleteEvent(${event.id})">🗑️ Delete</button>
-                        </div>
-                    </div>
-                `).join('');
-            }
+            document.getElementById('calendarView').innerHTML = '<div class="chart-container"><div class="chart-title">Calendar</div><p style="color: #a0a0a0;">Calendar view placeholder</p></div>';
+            document.getElementById('eventsList').innerHTML = events.map(e => `
+                <div class="event-card">
+                    <div class="contact-name">${e.title}</div>
+                    <div class="deal-info">📅 ${e.date} at ${e.time}</div>
+                </div>
+            `).join('');
         }
 
         function renderAnalytics() {
-            const analyticsContent = document.getElementById('analyticsContent');
-            
-            // Calculate metrics
             const totalLeads = contacts.filter(c => c.status === 'lead').length;
             const totalCustomers = contacts.filter(c => c.status === 'customer').length;
-            const conversionRate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(1) : 0;
-            
-            const closedDeals = deals.filter(d => d.stage === 'closed').length;
-            const totalDealsCount = deals.length;
-            const dealConversionRate = totalDealsCount > 0 ? ((closedDeals / totalDealsCount) * 100).toFixed(1) : 0;
-            
-            const avgDealValue = deals.length > 0 ? (deals.reduce((sum, d) => sum + d.value, 0) / deals.length).toFixed(0) : 0;
-            const forecastRevenue = deals.reduce((sum, d) => sum + (d.value * d.probability / 100), 0).toFixed(0);
+            const conversionRate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(0) : 0;
 
-            analyticsContent.innerHTML = `
+            document.getElementById('analyticsContent').innerHTML = `
                 <div class="chart-container">
                     <div class="chart-title">Key Metrics</div>
                     <div class="chart-bar">
@@ -1205,70 +1329,6 @@
                             <div class="chart-fill" style="width: ${conversionRate}%"></div>
                         </div>
                     </div>
-                    <div class="chart-bar">
-                        <div class="chart-label">
-                            <span>Deal Win Rate</span>
-                            <span>${dealConversionRate}%</span>
-                        </div>
-                        <div class="chart-progress">
-                            <div class="chart-fill" style="width: ${dealConversionRate}%"></div>
-                        </div>
-                    </div>
-                    <div class="chart-bar">
-                        <div class="chart-label">
-                            <span>Avg Deal Value</span>
-                            <span>$${Number(avgDealValue).toLocaleString()}</span>
-                        </div>
-                    </div>
-                    <div class="chart-bar">
-                        <div class="chart-label">
-                            <span>Forecast Revenue</span>
-                            <span>$${Number(forecastRevenue).toLocaleString()}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <div class="chart-title">Lead Score Distribution</div>
-                    ${['Hot (80+)', 'Warm (60-79)', 'Cold (<60)'].map((label, idx) => {
-                        const ranges = [[80, 100], [60, 79], [0, 59]];
-                        const count = contacts.filter(c => c.score >= ranges[idx][0] && c.score <= ranges[idx][1]).length;
-                        const percent = contacts.length > 0 ? (count / contacts.length * 100).toFixed(0) : 0;
-                        return `
-                            <div class="chart-bar">
-                                <div class="chart-label">
-                                    <span>${label}</span>
-                                    <span>${count} (${percent}%)</span>
-                                </div>
-                                <div class="chart-progress">
-                                    <div class="chart-fill" style="width: ${percent}%"></div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-
-                <div class="chart-container">
-                    <div class="chart-title">Pipeline by Stage</div>
-                    ${['lead', 'prospect', 'negotiation', 'closed'].map(stage => {
-                        const stageDeals = deals.filter(d => d.stage === stage);
-                        const value = stageDeals.reduce((sum, d) => sum + d.value, 0);
-                        const maxValue = Math.max(...['lead', 'prospect', 'negotiation', 'closed'].map(s => 
-                            deals.filter(d => d.stage === s).reduce((sum, d) => sum + d.value, 0)
-                        ));
-                        const percent = maxValue > 0 ? (value / maxValue * 100).toFixed(0) : 0;
-                        return `
-                            <div class="chart-bar">
-                                <div class="chart-label">
-                                    <span>${stage.charAt(0).toUpperCase() + stage.slice(1)}</span>
-                                    <span>$${value.toLocaleString()}</span>
-                                </div>
-                                <div class="chart-progress">
-                                    <div class="chart-fill" style="width: ${percent}%"></div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
                 </div>
             `;
         }
@@ -1279,299 +1339,44 @@
             
             const totalLeads = contacts.filter(c => c.status === 'lead').length;
             const totalCustomers = contacts.filter(c => c.status === 'customer').length;
-            const conversionRate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(0) : 0;
-            document.getElementById('conversionRate').textContent = conversionRate + '%';
+            const rate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(0) : 0;
+            document.getElementById('conversionRate').textContent = rate + '%';
             
-            const totalValue = deals.reduce((sum, d) => d.stage !== 'lost' ? sum + d.value : sum, 0);
-            document.getElementById('totalValue').textContent = '$' + totalValue.toLocaleString();
+            const total = deals.reduce((sum, d) => sum + d.value, 0);
+            document.getElementById('totalValue').textContent = '$' + total.toLocaleString();
         }
 
-        // Quick action functions
-        function logEmail(contactId) {
+        function scheduleReminder(contactId) {
             const contact = contacts.find(c => c.id === contactId);
             if (!contact) return;
             
-            const template = emailTemplates[0];
-            if (confirm(`Send "${template.subject}" to ${contact.name}?`)) {
-                contact.interactions++;
-                contact.score = Math.min(100, contact.score + 5);
-                contact.lastContact = new Date().toISOString().split('T')[0];
-                contact.history.push({
-                    action: `Email sent: ${template.subject}`,
-                    date: new Date().toISOString()
-                });
-                renderContacts();
-                updateStats();
-                alert('Email logged successfully!');
-            }
-        }
-
-        function scheduleEvent(contactId) {
-            const contact = contacts.find(c => c.id === contactId);
-            if (!contact) return;
-            
-            const date = prompt('Meeting date (YYYY-MM-DD):');
-            if (!date) return;
-            
-            const time = prompt('Meeting time (HH:MM):');
-            if (!time) return;
-
-            events.push({
-                id: events.length > 0 ? Math.max(...events.map(e => e.id)) + 1 : 1,
-                title: `Meeting with ${contact.name}`,
-                date: date,
-                time: time,
-                attendees: contact.name,
-                type: 'meeting',
-                location: 'TBD'
-            });
-
-            contact.interactions++;
-            contact.score = Math.min(100, contact.score + 10);
-            
-            renderCalendar();
-            renderContacts();
-            updateStats();
-            alert('Event scheduled!');
-        }
-
-        function createQuote(contactId) {
-            const contact = contacts.find(c => c.id === contactId);
-            if (!contact) return;
-            
-            showQuoteModal(contact);
-        }
-
-        function showQuoteModal(contact) {
-            const modal = document.getElementById('quoteModal');
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="modal-header">Create Quote for ${contact.name}</div>
-                    <div style="margin-bottom: 20px;">
-                        <div class="form-label">Select Products</div>
-                        ${products.map(p => `
-                            <div style="margin-bottom: 10px;">
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                    <input type="checkbox" class="product-checkbox" data-product-id="${p.id}" data-price="${p.price}">
-                                    <span style="flex: 1;">
-                                        <strong>${p.name}</strong> - $${p.price}/${p.unit}
-                                        <br><span style="font-size: 0.7rem; color: #a0a0a0;">${p.description}</span>
-                                    </span>
-                                </label>
-                                <input type="number" min="1" value="1" class="form-input" id="qty-${p.id}" placeholder="Qty" style="margin-top: 6px; max-width: 100px;">
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="quote-section" id="quotePreview" style="display: none;">
-                        <div style="font-size: 0.8rem; font-weight: 700; margin-bottom: 10px;">Quote Preview</div>
-                        <div id="quoteItems"></div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-                        <button type="button" class="btn-primary" onclick="generateQuote(${contact.id})">Generate Quote</button>
-                    </div>
-                </div>
-            `;
-            modal.classList.add('active');
-
-            // Add event listeners
-            document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', updateQuotePreview);
-            });
-        }
-
-        function updateQuotePreview() {
-            const selectedProducts = [];
-            document.querySelectorAll('.product-checkbox:checked').forEach(checkbox => {
-                const productId = parseInt(checkbox.dataset.productId);
-                const product = products.find(p => p.id === productId);
-                const qty = parseInt(document.getElementById(`qty-${productId}`).value) || 1;
-                selectedProducts.push({ ...product, qty });
-            });
-
-            const preview = document.getElementById('quotePreview');
-            const itemsDiv = document.getElementById('quoteItems');
-            
-            if (selectedProducts.length === 0) {
-                preview.style.display = 'none';
-                return;
-            }
-
-            preview.style.display = 'block';
-            let total = 0;
-            itemsDiv.innerHTML = selectedProducts.map(p => {
-                const subtotal = p.price * p.qty;
-                total += subtotal;
-                return `
-                    <div class="quote-item">
-                        <span>${p.name} (${p.qty}x)</span>
-                        <span>$${subtotal.toLocaleString()}</span>
-                    </div>
-                `;
-            }).join('') + `
-                <div class="quote-item">
-                    <span>TOTAL</span>
-                    <span>$${total.toLocaleString()}</span>
-                </div>
-            `;
-        }
-
-        function generateQuote(contactId) {
-            const selectedProducts = [];
-            document.querySelectorAll('.product-checkbox:checked').forEach(checkbox => {
-                const productId = parseInt(checkbox.dataset.productId);
-                const product = products.find(p => p.id === productId);
-                const qty = parseInt(document.getElementById(`qty-${productId}`).value) || 1;
-                selectedProducts.push({ ...product, qty });
-            });
-
-            if (selectedProducts.length === 0) {
-                alert('Please select at least one product');
-                return;
-            }
-
-            const total = selectedProducts.reduce((sum, p) => sum + (p.price * p.qty), 0);
-            
-            quotes.push({
-                id: quotes.length + 1,
-                contactId: contactId,
-                products: selectedProducts,
-                total: total,
-                date: new Date().toISOString().split('T')[0],
-                status: 'sent'
-            });
-
-            const contact = contacts.find(c => c.id === contactId);
-            if (contact) {
-                contact.history.push({
-                    action: `Quote generated: $${total.toLocaleString()}`,
-                    date: new Date().toISOString()
-                });
-                contact.score = Math.min(100, contact.score + 15);
-            }
-
-            alert(`Quote generated successfully!\nTotal: $${total.toLocaleString()}`);
-            closeModal();
-            renderContacts();
-        }
-
-        function openWorkflowsModal() {
-            const modal = document.getElementById('workflowsModal');
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="modal-header">Automated Workflows</div>
-                    ${workflows.map(w => `
-                        <div class="workflow-card">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: #fff;">${w.name}</strong>
-                                <span class="status-badge ${w.active ? 'status-completed' : 'status-pending'}">${w.active ? 'Active' : 'Inactive'}</span>
-                            </div>
-                            <div class="workflow-trigger">⚡ Trigger: ${w.trigger}</div>
-                            <div class="workflow-action">
-                                ${w.actions.map(a => `• ${a}`).join('<br>')}
-                            </div>
-                        </div>
-                    `).join('')}
-                    <div class="form-actions">
-                        <button type="button" class="btn-primary" onclick="closeModal()">Close</button>
-                    </div>
-                </div>
-            `;
-            modal.classList.add('active');
-        }
-
-        function openProductsModal() {
-            const modal = document.getElementById('productsModal');
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="modal-header">Product Catalog</div>
-                    ${products.map(p => `
-                        <div class="product-card">
-                            <div class="contact-name">${p.name}</div>
-                            <div class="deal-info">${p.description}</div>
-                            <div class="deal-value" style="font-size: 1rem; margin-top: 8px;">$${p.price}/${p.unit}</div>
-                        </div>
-                    `).join('')}
-                    <div class="form-actions">
-                        <button type="button" class="btn-primary" onclick="closeModal()">Close</button>
-                    </div>
-                </div>
-            `;
-            modal.classList.add('active');
-        }
-
-        function openTemplatesModal() {
-            const modal = document.getElementById('templatesModal');
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="modal-header">Email Templates</div>
-                    ${emailTemplates.map(t => `
-                        <div class="template-item" style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 8px;">
-                            <div style="font-weight: 700; color: #fff; margin-bottom: 4px;">${t.name}</div>
-                            <div style="font-size: 0.75rem; color: #a0a0a0;">Subject: ${t.subject}</div>
-                        </div>
-                    `).join('')}
-                    <div class="form-actions">
-                        <button type="button" class="btn-primary" onclick="closeModal()">Close</button>
-                    </div>
-                </div>
-            `;
-            modal.classList.add('active');
-        }
-
-        function openAddModal() {
-            alert('Add modal for ' + currentTab);
-        }
-
-        function viewContactDetail(id) {
-            alert('View contact ' + id);
-        }
-
-        function moveDealStage(id) {
-            const deal = deals.find(d => d.id === id);
-            if (!deal) return;
-            const stages = ['lead', 'prospect', 'negotiation', 'closed'];
-            const idx = stages.indexOf(deal.stage);
-            deal.stage = stages[(idx + 1) % stages.length];
-            renderAll();
-        }
-
-        function toggleTaskStatus(id) {
-            const task = tasks.find(t => t.id === id);
-            if (task) {
-                task.status = task.status === 'pending' ? 'completed' : 'pending';
-                renderTasks();
+            if ('Notification' in window && Notification.permission === 'granted') {
+                // Schedule notification for 1 minute from now (demo)
+                setTimeout(() => {
+                    new Notification(`Reminder: Follow up with ${contact.name}`, {
+                        body: `Contact: ${contact.email}`,
+                        icon: '/icon-192.png',
+                        badge: '/icon-192.png',
+                        tag: 'reminder-' + contactId
+                    });
+                }, 60000);
+                alert('Reminder set for 1 minute from now!');
+            } else {
+                alert('Please enable notifications first');
             }
         }
 
         function deleteContact(id) {
-            if (confirm('Delete this contact?')) {
+            if (confirm('Delete?')) {
                 contacts = contacts.filter(c => c.id !== id);
+                saveAllData();
                 renderContacts();
                 updateStats();
             }
         }
 
-        function deleteDeal(id) {
-            if (confirm('Delete this deal?')) {
-                deals = deals.filter(d => d.id !== id);
-                renderAll();
-                updateStats();
-            }
-        }
-
-        function deleteTask(id) {
-            if (confirm('Delete this task?')) {
-                tasks = tasks.filter(t => t.id !== id);
-                renderTasks();
-            }
-        }
-
-        function deleteEvent(id) {
-            if (confirm('Delete this event?')) {
-                events = events.filter(e => e.id !== id);
-                renderCalendar();
-            }
+        function openAddModal() {
+            alert('Add functionality for ' + currentTab);
         }
 
         function closeModal() {
@@ -1579,25 +1384,30 @@
         }
 
         function exportData() {
-            alert('Export functionality');
-        }
-
-        function importData(e) {
-            alert('Import functionality');
+            const data = JSON.stringify({ contacts, deals, tasks, events }, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'crm-data-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         document.getElementById('searchBox').addEventListener('input', (e) => {
-            const filter = e.target.value;
-            if (currentTab === 'contacts') renderContacts(filter);
-            else if (currentTab === 'deals') renderDeals(filter);
-            else if (currentTab === 'tasks') renderTasks(filter);
+            if (currentTab === 'contacts') renderContacts(e.target.value);
         });
 
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) closeModal();
         });
 
-        initSampleData();
+        // Initialize app
+        initDB().then(() => {
+            loadAllData();
+        }).catch(() => {
+            initSampleData();
+        });
     </script>
 </body>
 </html>
