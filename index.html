@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Complete CRM solution with offline capability">
+    <link rel="manifest" href="manifest.json">
+    <title>2026 techVA AI CRM Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 1%;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1%;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 12px 1%;
+            margin-bottom: 1%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 0.7rem;
+            color: #a0a0a0;
+            font-weight: 400;
+        }
+
+        .offline-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            background: rgba(244, 67, 54, 0.9);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            z-index: 3000;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+
+        .offline-indicator.show {
+            display: block;
+        }
+
+        .online-indicator {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1%;
+            margin-bottom: 1%;
+        }
+
+        .stat-card {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.6rem;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1%;
+            margin-bottom: 1%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 70px;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            color: #a0a0a0;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .add-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .add-btn:active {
+            transform: scale(0.95);
+        }
+
+        .contact-card, .deal-card, .task-card, .event-card, .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 1%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before, .deal-card::before, .task-card::before, .event-card::before, .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .contact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .contact-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .contact-company {
+            font-size: 0.75rem;
+            color: #a0a0a0;
+        }
+
+        .contact-info {
+            font-size: 0.7rem;
+            color: #b0b0b0;
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 8px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-lead { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.4); }
+        .status-prospect { background: rgba(33, 150, 243, 0.2); color: #2196f3; border: 1px solid rgba(33, 150, 243, 0.4); }
+        .status-customer { background: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.4); }
+        .status-negotiation { background: rgba(255, 152, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.4); }
+        .status-closed { background: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.4); }
+        .status-lost { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid rgba(244, 67, 54, 0.4); }
+        .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.4); }
+        .status-completed { background: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.4); }
+
+        .lead-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.4);
+        }
+
+        .lead-score.hot { background: rgba(244, 67, 54, 0.2); color: #f44336; border-color: rgba(244, 67, 54, 0.4); }
+        .lead-score.warm { background: rgba(255, 152, 0, 0.2); color: #ff9800; border-color: rgba(255, 152, 0, 0.4); }
+        .lead-score.cold { background: rgba(33, 150, 243, 0.2); color: #2196f3; border-color: rgba(33, 150, 243, 0.4); }
+
+        .deal-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 8px 0;
+        }
+
+        .deal-info {
+            font-size: 0.7rem;
+            color: #b0b0b0;
+            margin: 4px 0;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0.98);
+        }
+
+        .btn-delete {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: rgba(244, 67, 54, 0.4);
+            color: #f44336;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            padding: 1%;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.7rem;
+            color: #a0a0a0;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #707070;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            font-size: 0.85rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            margin-bottom: 1%;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 1%;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 7px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toolbar-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0.98);
+        }
+
+        .pipeline-board {
+            display: flex;
+            gap: 1%;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .pipeline-column {
+            min-width: 260px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .pipeline-header {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pipeline-count {
+            background: rgba(102, 126, 234, 0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 1%;
+        }
+
+        .chart-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .chart-bar {
+            margin-bottom: 10px;
+        }
+
+        .chart-label {
+            font-size: 0.7rem;
+            color: #a0a0a0;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chart-progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .chart-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-top: 10px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day.header {
+            font-weight: 700;
+            color: #a0a0a0;
+            cursor: default;
+        }
+
+        .calendar-day.current {
+            background: rgba(102, 126, 234, 0.3);
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .calendar-day.has-event {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .calendar-day:not(.header):hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .camera-preview {
+            width: 100%;
+            border-radius: 8px;
+            margin: 10px 0;
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+        .location-info {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.75rem;
+        }
+
+        .install-prompt {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 1%;
+            display: none;
+        }
+
+        .install-prompt.show {
+            display: block;
+        }
+
+        .sync-status {
+            font-size: 0.7rem;
+            color: #a0a0a0;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-btn {
+            padding: 8px 12px;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 8px;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .file-upload-btn:active {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 0.9rem;
+            }
+            
+            .stat-value {
+                font-size: 1rem;
+            }
+            
+            .stat-label {
+                font-size: 0.55rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pipeline-column {
+                min-width: 220px;
+            }
+
+            .tab {
+                font-size: 0.65rem;
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-indicator" id="offlineIndicator">
+        📡 Offline Mode
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>2026 techVA AI automation CRM Pro</h1>
+            <div class="subtitle">Complete CRM Solution with PWA Features</div>
+        </header>
+
+        <div class="install-prompt" id="installPrompt">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="color: #667eea;">📲 Install App</strong>
+                    <p style="font-size: 0.7rem; margin-top: 4px; color: #a0a0a0;">Add to home screen for offline access</p>
+                </div>
+                <button class="btn-primary" style="flex: 0; padding: 8px 16px;" onclick="installApp()">Install</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value" id="totalContacts">0</span>
+                <span class="stat-label">Contacts</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="totalDeals">0</span>
+                <span class="stat-label">Deals</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="conversionRate">0%</span>
+                <span class="stat-label">Conv. Rate</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="totalValue">$0</span>
+                <span class="stat-label">Pipeline</span>
+            </div>
+        </div>
+
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search...">
+
+        <div class="toolbar">
+            <button class="toolbar-btn" onclick="exportData()">📤 Export</button>
+            <button class="toolbar-btn" onclick="requestNotificationPermission()">🔔 Notifications</button>
+            <button class="toolbar-btn" onclick="openCamera()">📷 Scan Card</button>
+            <button class="toolbar-btn" onclick="getLocation()">📍 Location</button>
+            <button class="toolbar-btn" onclick="syncData()">🔄 Sync</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('contacts')">Contacts</button>
+            <button class="tab" onclick="switchTab('deals')">Deals</button>
+            <button class="tab" onclick="switchTab('pipeline')">Pipeline</button>
+            <button class="tab" onclick="switchTab('tasks')">Tasks</button>
+            <button class="tab" onclick="switchTab('calendar')">Calendar</button>
+            <button class="tab" onclick="switchTab('analytics')">Analytics</button>
+        </div>
+
+        <div class="sync-status" id="syncStatus">
+            ✓ Data synced
+        </div>
+
+        <div id="contactsTab" class="tab-content active">
+            <div id="contactsList"></div>
+        </div>
+
+        <div id="dealsTab" class="tab-content">
+            <div id="dealsList"></div>
+        </div>
+
+        <div id="pipelineTab" class="tab-content">
+            <div class="pipeline-board" id="pipelineBoard"></div>
+        </div>
+
+        <div id="tasksTab" class="tab-content">
+            <div id="tasksList"></div>
+        </div>
+
+        <div id="calendarTab" class="tab-content">
+            <div id="calendarView"></div>
+            <div id="eventsList" style="margin-top: 20px;"></div>
+        </div>
+
+        <div id="analyticsTab" class="tab-content">
+            <div id="analyticsContent"></div>
+        </div>
+    </div>
+
+    <button class="add-btn" onclick="openAddModal()">+</button>
+
+    <!-- Modals -->
+    <div id="cameraModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📷 Scan Business Card</div>
+            <video id="cameraPreview" class="camera-preview" autoplay playsinline></video>
+            <canvas id="cameraCanvas" style="display: none;"></canvas>
+            <img id="capturedImage" class="camera-preview" style="display: none;">
+            <div class="form-actions">
+                <button class="btn-secondary" onclick="closeCamera()">Cancel</button>
+                <button class="btn-primary" id="captureBtn" onclick="capturePhoto()">📸 Capture</button>
+                <button class="btn-primary" id="processBtn" style="display: none;" onclick="processBusinessCard()">✓ Process</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📍 Current Location</div>
+            <div id="locationDisplay"></div>
+            <div class="form-actions">
+                <button class="btn-primary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IndexedDB setup for offline storage
+        let db;
+        const DB_NAME = 'techva_crm_db';
+        const DB_VERSION = 1;
+
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    
+                    if (!db.objectStoreNames.contains('contacts')) {
+                        db.createObjectStore('contacts', { keyPath: 'id', autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains('deals')) {
+                        db.createObjectStore('deals', { keyPath: 'id', autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains('tasks')) {
+                        db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+                    }
+                    if (!db.objectStoreNames.contains('events')) {
+                        db.createObjectStore('events', { keyPath: 'id', autoIncrement: true });
+                    }
+                };
+            });
+        }
+
+        // Save to IndexedDB
+        async function saveToIndexedDB(storeName, data) {
+            if (!db) await initDB();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.put(data);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Load from IndexedDB
+        async function loadFromIndexedDB(storeName) {
+            if (!db) await initDB();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered:', reg))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+
+        // Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.add('show');
+        });
+
+        async function installApp() {
+            if (!deferredPrompt) {
+                alert('App is already installed or installation not available');
+                return;
+            }
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                document.getElementById('installPrompt').classList.remove('show');
+            }
+            deferredPrompt = null;
+        }
+
+        // Online/Offline detection
+        window.addEventListener('online', () => {
+            const indicator = document.getElementById('offlineIndicator');
+            indicator.textContent = '✓ Online';
+            indicator.classList.add('online-indicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+            syncData();
+        });
+
+        window.addEventListener('offline', () => {
+            const indicator = document.getElementById('offlineIndicator');
+            indicator.textContent = '📡 Offline Mode';
+            indicator.classList.remove('online-indicator');
+            indicator.classList.add('show');
+        });
+
+        // Notification permission
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                alert('This browser does not support notifications');
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                new Notification('Notifications Enabled!', {
+                    body: 'You will now receive CRM updates',
+                    icon: '/icon-192.png',
+                    badge: '/icon-192.png'
+                });
+            }
+        }
+
+        // Camera functionality
+        let stream;
+        async function openCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                const video = document.getElementById('cameraPreview');
+                video.srcObject = stream;
+                video.style.display = 'block';
+                document.getElementById('capturedImage').style.display = 'none';
+                document.getElementById('captureBtn').style.display = 'block';
+                document.getElementById('processBtn').style.display = 'none';
+                document.getElementById('cameraModal').classList.add('active');
+            } catch (err) {
+                alert('Camera access denied: ' + err.message);
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraPreview');
+            const canvas = document.getElementById('cameraCanvas');
+            const img = document.getElementById('capturedImage');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            img.src = canvas.toDataURL('image/png');
+            img.style.display = 'block';
+            video.style.display = 'none';
+            
+            document.getElementById('captureBtn').style.display = 'none';
+            document.getElementById('processBtn').style.display = 'block';
+        }
+
+        function processBusinessCard() {
+            // Simulated OCR processing
+            const name = prompt('Enter name from card:');
+            const email = prompt('Enter email from card:');
+            const phone = prompt('Enter phone from card:');
+            const company = prompt('Enter company from card:');
+            
+            if (name && email) {
+                contacts.push({
+                    id: contacts.length + 1,
+                    name,
+                    email,
+                    phone: phone || '',
+                    company: company || '',
+                    status: 'lead',
+                    tags: ['Scanned'],
+                    score: 50,
+                    interactions: 0,
+                    lastContact: new Date().toISOString().split('T')[0],
+                    history: [{ action: 'Contact created via card scan', date: new Date().toISOString() }]
+                });
+                
+                saveAllData();
+                renderContacts();
+                updateStats();
+                closeCamera();
+                alert('Contact added from business card!');
+            }
+        }
+
+        function closeCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById('cameraModal').classList.remove('active');
+        }
+
+        // Geolocation
+        async function getLocation() {
+            if (!navigator.geolocation) {
+                alert('Geolocation not supported');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude, accuracy } = position.coords;
+                    document.getElementById('locationDisplay').innerHTML = `
+                        <div class="location-info">
+                            <div style="font-weight: 700; margin-bottom: 8px;">📍 Current Location</div>
+                            <div style="margin: 4px 0;">Latitude: ${latitude.toFixed(6)}</div>
+                            <div style="margin: 4px 0;">Longitude: ${longitude.toFixed(6)}</div>
+                            <div style="margin: 4px 0;">Accuracy: ±${Math.round(accuracy)}m</div>
+                            <div style="margin-top: 10px;">
+                                <a href="https://www.google.com/maps?q=${latitude},${longitude}" 
+                                   target="_blank" 
+                                   style="color: #667eea; text-decoration: underline;">
+                                    View on Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('locationModal').classList.add('active');
+                },
+                (error) => {
+                    alert('Location access denied: ' + error.message);
+                }
+            );
+        }
+
+        // Background sync
+        async function syncData() {
+            const syncStatus = document.getElementById('syncStatus');
+            syncStatus.innerHTML = '🔄 Syncing...';
+            syncStatus.style.color = '#ff9800';
+
+            try {
+                // Save all data to IndexedDB
+                await saveAllData();
+                
+                // Simulate server sync
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                syncStatus.innerHTML = '✓ Data synced';
+                syncStatus.style.color = '#4caf50';
+                
+                setTimeout(() => {
+                    syncStatus.style.color = '#a0a0a0';
+                }, 3000);
+            } catch (err) {
+                syncStatus.innerHTML = '⚠️ Sync failed';
+                syncStatus.style.color = '#f44336';
+            }
+        }
+
+        async function saveAllData() {
+            for (const contact of contacts) {
+                await saveToIndexedDB('contacts', contact);
+            }
+            for (const deal of deals) {
+                await saveToIndexedDB('deals', deal);
+            }
+            for (const task of tasks) {
+                await saveToIndexedDB('tasks', task);
+            }
+            for (const event of events) {
+                await saveToIndexedDB('events', event);
+            }
+        }
+
+        async function loadAllData() {
+            try {
+                contacts = await loadFromIndexedDB('contacts') || [];
+                deals = await loadFromIndexedDB('deals') || [];
+                tasks = await loadFromIndexedDB('tasks') || [];
+                events = await loadFromIndexedDB('events') || [];
+                
+                if (contacts.length === 0) {
+                    initSampleData();
+                } else {
+                    renderAll();
+                    updateStats();
+                }
+            } catch (err) {
+                console.error('Error loading data:', err);
+                initSampleData();
+            }
+        }
+
+        // Data storage
+        let contacts = [];
+        let deals = [];
+        let tasks = [];
+        let events = [];
+        let currentTab = 'contacts';
+
+        // Sample data
+        function initSampleData() {
+            contacts = [
+                {
+                    id: 1,
+                    name: 'Sarah Johnson',
+                    email: 'sarah.j@techcorp.com',
+                    phone: '+1 (555) 123-4567',
+                    company: 'TechCorp Inc.',
+                    status: 'customer',
+                    tags: ['VIP', 'Tech'],
+                    score: 85,
+                    interactions: 12,
+                    lastContact: '2026-02-03',
+                    history: [{ action: 'Contact created', date: '2026-01-15T10:30:00' }]
+                }
+            ];
+
+            deals = [
+                {
+                    id: 1,
+                    name: 'Enterprise License',
+                    contact: 'Sarah Johnson',
+                    value: 45000,
+                    stage: 'negotiation',
+                    closeDate: '2026-03-15',
+                    tags: ['Enterprise'],
+                    probability: 70
+                }
+            ];
+
+            tasks = [
+                {
+                    id: 1,
+                    title: 'Follow up with Sarah',
+                    related: 'Sarah Johnson',
+                    dueDate: '2026-02-10',
+                    priority: 'high',
+                    status: 'pending'
+                }
+            ];
+
+            events = [
+                {
+                    id: 1,
+                    title: 'Meeting with Sarah',
+                    date: '2026-02-08',
+                    time: '14:00',
+                    attendees: 'Sarah Johnson',
+                    location: 'Zoom'
+                }
+            ];
+
+            saveAllData();
+            renderAll();
+            updateStats();
+        }
+
+        function renderAll() {
+            renderContacts();
+            renderDeals();
+            renderTasks();
+            renderPipeline();
+            renderCalendar();
+            renderAnalytics();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            const tabs = ['contacts', 'deals', 'pipeline', 'tasks', 'calendar', 'analytics'];
+            const index = tabs.indexOf(tab);
+            document.querySelectorAll('.tab')[index].classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            if (tab === 'pipeline') renderPipeline();
+            if (tab === 'calendar') renderCalendar();
+            if (tab === 'analytics') renderAnalytics();
+        }
+
+        function getScoreClass(score) {
+            if (score >= 80) return 'hot';
+            if (score >= 60) return 'warm';
+            return 'cold';
+        }
+
+        function getScoreLabel(score) {
+            if (score >= 80) return 'Hot';
+            if (score >= 60) return 'Warm';
+            return 'Cold';
+        }
+
+        function renderContacts(filter = '') {
+            const contactsList = document.getElementById('contactsList');
+            const filtered = contacts.filter(c => 
+                c.name.toLowerCase().includes(filter.toLowerCase()) ||
+                c.email.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                contactsList.innerHTML = '<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-text">No contacts</div></div>';
+                return;
+            }
+
+            contactsList.innerHTML = filtered.map(contact => `
+                <div class="contact-card">
+                    <div class="contact-header">
+                        <div>
+                            <div class="contact-name">${contact.name}</div>
+                            <div class="contact-company">${contact.company || 'No company'}</div>
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-direction: column; align-items: flex-end;">
+                            <span class="status-badge status-${contact.status}">${contact.status}</span>
+                            <span class="lead-score ${getScoreClass(contact.score)}">⭐ ${contact.score}</span>
+                        </div>
+                    </div>
+                    <div class="contact-info">📧 ${contact.email}</div>
+                    <div class="contact-info">📱 ${contact.phone || 'N/A'}</div>
+                    ${contact.tags ? `<div class="tags-container">${contact.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+                    <div class="action-btns">
+                        <button class="btn" onclick="scheduleReminder(${contact.id})">🔔 Remind</button>
+                        <button class="btn btn-delete" onclick="deleteContact(${contact.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderDeals() {
+            const dealsList = document.getElementById('dealsList');
+            if (deals.length === 0) {
+                dealsList.innerHTML = '<div class="empty-state"><div class="empty-icon">💼</div><div class="empty-text">No deals</div></div>';
+                return;
+            }
+
+            dealsList.innerHTML = deals.map(deal => `
+                <div class="deal-card">
+                    <div class="contact-header">
+                        <div>
+                            <div class="contact-name">${deal.name}</div>
+                            <div class="contact-company">${deal.contact}</div>
+                        </div>
+                        <span class="status-badge status-${deal.stage}">${deal.stage}</span>
+                    </div>
+                    <div class="deal-value">$${deal.value.toLocaleString()}</div>
+                    <div class="deal-info">📊 ${deal.probability}% probability</div>
+                </div>
+            `).join('');
+        }
+
+        function renderTasks() {
+            const tasksList = document.getElementById('tasksList');
+            if (tasks.length === 0) {
+                tasksList.innerHTML = '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">No tasks</div></div>';
+                return;
+            }
+
+            tasksList.innerHTML = tasks.map(task => `
+                <div class="task-card">
+                    <div class="contact-name">${task.title}</div>
+                    <div class="contact-company">${task.related}</div>
+                    <div class="deal-info">📅 ${task.dueDate}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderPipeline() {
+            const board = document.getElementById('pipelineBoard');
+            const stages = ['lead', 'prospect', 'negotiation', 'closed'];
+            const labels = { lead: 'Lead', prospect: 'Prospect', negotiation: 'Negotiation', closed: 'Closed' };
+
+            board.innerHTML = stages.map(stage => {
+                const stageDeals = deals.filter(d => d.stage === stage);
+                const value = stageDeals.reduce((sum, d) => sum + d.value, 0);
+                return `
+                    <div class="pipeline-column">
+                        <div class="pipeline-header">
+                            <span>${labels[stage]}</span>
+                            <span class="pipeline-count">${stageDeals.length}</span>
+                        </div>
+                        <div style="font-size: 0.7rem; color: #a0a0a0;">$${value.toLocaleString()}</div>
+                        ${stageDeals.map(d => `
+                            <div class="deal-card" style="margin-top: 10px;">
+                                <div class="contact-name">${d.name}</div>
+                                <div class="deal-value" style="font-size: 1rem;">$${d.value.toLocaleString()}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCalendar() {
+            document.getElementById('calendarView').innerHTML = '<div class="chart-container"><div class="chart-title">Calendar</div><p style="color: #a0a0a0;">Calendar view placeholder</p></div>';
+            document.getElementById('eventsList').innerHTML = events.map(e => `
+                <div class="event-card">
+                    <div class="contact-name">${e.title}</div>
+                    <div class="deal-info">📅 ${e.date} at ${e.time}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderAnalytics() {
+            const totalLeads = contacts.filter(c => c.status === 'lead').length;
+            const totalCustomers = contacts.filter(c => c.status === 'customer').length;
+            const conversionRate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(0) : 0;
+
+            document.getElementById('analyticsContent').innerHTML = `
+                <div class="chart-container">
+                    <div class="chart-title">Key Metrics</div>
+                    <div class="chart-bar">
+                        <div class="chart-label">
+                            <span>Conversion Rate</span>
+                            <span>${conversionRate}%</span>
+                        </div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: ${conversionRate}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateStats() {
+            document.getElementById('totalContacts').textContent = contacts.length;
+            document.getElementById('totalDeals').textContent = deals.length;
+            
+            const totalLeads = contacts.filter(c => c.status === 'lead').length;
+            const totalCustomers = contacts.filter(c => c.status === 'customer').length;
+            const rate = totalLeads > 0 ? ((totalCustomers / (totalLeads + totalCustomers)) * 100).toFixed(0) : 0;
+            document.getElementById('conversionRate').textContent = rate + '%';
+            
+            const total = deals.reduce((sum, d) => sum + d.value, 0);
+            document.getElementById('totalValue').textContent = '$' + total.toLocaleString();
+        }
+
+        function scheduleReminder(contactId) {
+            const contact = contacts.find(c => c.id === contactId);
+            if (!contact) return;
+            
+            if ('Notification' in window && Notification.permission === 'granted') {
+                // Schedule notification for 1 minute from now (demo)
+                setTimeout(() => {
+                    new Notification(`Reminder: Follow up with ${contact.name}`, {
+                        body: `Contact: ${contact.email}`,
+                        icon: '/icon-192.png',
+                        badge: '/icon-192.png',
+                        tag: 'reminder-' + contactId
+                    });
+                }, 60000);
+                alert('Reminder set for 1 minute from now!');
+            } else {
+                alert('Please enable notifications first');
+            }
+        }
+
+        function deleteContact(id) {
+            if (confirm('Delete?')) {
+                contacts = contacts.filter(c => c.id !== id);
+                saveAllData();
+                renderContacts();
+                updateStats();
+            }
+        }
+
+        function openAddModal() {
+            alert('Add functionality for ' + currentTab);
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+
+        function exportData() {
+            const data = JSON.stringify({ contacts, deals, tasks, events }, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'crm-data-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            if (currentTab === 'contacts') renderContacts(e.target.value);
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) closeModal();
+        });
+
+        // Initialize app
+        initDB().then(() => {
+            loadAllData();
+        }).catch(() => {
+            initSampleData();
+        });
+    </script>
+</body>
+</html>
